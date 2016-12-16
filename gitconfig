@@ -1,0 +1,81 @@
+[apply]
+  whitespace = nowarn
+[core]
+	excludesfile = ~/.gitignore_global
+  attributesfile = ~/.gitattributes
+  quotepath = false
+  editor = nvim
+[alias]
+  current-branch = !git symbolic-ref -q HEAD | sed -e 's|^refs/heads/||'
+  pretty-log = !bash -c 'source ~/.githelpers && git-log-pretty --all'
+  pr = "!f() { git fetch origin refs/pull/$1/head:pr/$1; } ; f"
+  unstage = reset HEAD
+	appraise = !~/gocode/bin/git-appraise
+[color]
+  ui = auto
+[color "branch"]
+  current = yellow reverse
+  local = yellow
+  remote = green
+[color "diff"]
+  meta = yellow bold
+  frag = magenta bold
+  old = red bold
+  new = green bold
+[color "status"]
+  added = yellow
+  changed = green
+  untracked = cyan
+[url "git@bitbucket.org:"]
+  insteadOf = "bb:"
+  pushInsteadOf = "bitbucket:"
+  pushInsteadOf = "git://bitbucket.org/"
+[url "git://bitbucket.org/"]
+  insteadOf = "bitbucket:"
+[url "git@github.com:"]
+  insteadOf = "gh:"
+  pushInsteadOf = "go.bh5.co/"
+  pushInsteadOf = "github:"
+  pushInsteadOf = "https://github.com/"
+  pushInsteadOf = "git://github.com/"
+[url "git://github.com/"]
+  insteadOf = "github:"
+[url "git@gist.github.com:"]
+  insteadOf = "gst:"
+  pushInsteadOf = "gist:"
+  pushInsteadOf = "git://gist.github.com/"
+[url "git://gist.github.com/"]
+  insteadOf = "gist:"
+[credential]
+	helper = osxkeychain
+[help]
+  autocorrect = 1
+[push]
+  default = simple
+[include]
+  path = ~/.gitconfig_local
+[branch]
+	autosetuprebase = always
+[pull]
+	rebase = preserve
+[http]
+  postBuffer = 524288000
+[merge]
+  log = false
+[fetch]
+  prune = true
+[mergetool "fugitive"]
+	cmd = vim -f -c \"Gvdiff\" \"$MERGED\"
+[merge]
+	tool = fugitive
+[filter "media"]
+	clean = git-media-clean %f
+	smudge = git-media-smudge %f
+[filter "hawser"]
+	clean = git hawser clean %f
+	smudge = git hawser smudge %f
+	required = true
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	required = true

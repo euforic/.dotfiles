@@ -1,0 +1,157 @@
+# System
+
+[[ -s "$HOME/google-cloud-sdk" ]] && source "$HOME/google-cloud-sdk/path.zsh.inc" && source "$HOME/google-cloud-sdk/completion.zsh.inc"
+
+#BASE16_SHELL=true
+
+unalias gb
+#unalias gvt
+
+alias rsrc="source $HOME/.zshrc"
+
+# golang debugger
+alias qq=". $GOPATH/src/github.com/y0ssar1an/q/q.sh"
+alias rmqq="rm $TMPDIR/q"
+
+# vim
+alias vi="nvim"
+alias vim="nvim"
+
+## docker-machine
+alias dm="docker-machine"
+
+## osx
+alias hidden!="defaults write com.apple.finder AppleShowAllFiles TRUE && killall Finder"
+alias hidden="defaults write com.apple.finder AppleShowAllFiles FALSE && killall Finder"
+
+# helper aliases
+alias zshconfig="vim ~/.zshrc.local"
+alias ohmyzsh="vim ~/.oh-my-zsh"
+alias dotfiles="cd ~/.dotfiles"
+
+## Browsers
+alias chrome="$HOME/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
+alias safari="open -a Safari"
+alias ff="open -a Firefox"
+
+## Redis
+alias redis-up="redis-server /usr/local/etc/redis.conf > /dev/null &"
+alias redis-down='killall redis-server'
+
+# Mongo
+alias mongo-up="mongod &> /dev/null &"
+alias mongo-down='killall mongod'
+
+# Postgres
+alias postgres-up="postgres -D /usr/local/var/postgres &> /dev/null &"
+alias postgres-down="killall postgres"
+
+# Remove the hosts that I don't want to keep around- in this case, only
+# keep the first host.
+alias hosts="head -2 ~/.ssh/known_hosts | tail -1 > ~/.ssh/known_hosts"
+
+# Pipe my public key to my clipboard.
+alias pubkey="more ~/.ssh/id_rsa.pub | pbcopy | echo '=> Public key copied to pasteboard.'"
+
+# Exports
+export NVIM_TUI_ENABLE_TRUE_COLOR=1
+#export TERM="xterm-256color"
+export HOMEBREW_CELLAR="/usr/local/Cellar"
+export GO_APPENGINE=$HOME/go_appengine
+export GOPATH=$HOME/go
+export GOCODE=$GOPATH/src
+export GOBINS=$GOPATH/bin
+export ANDROID_SDK=/usr/local/opt/android-sdk
+export ANDROID_NDK=/usr/local/opt/android-ndk
+export ANDROID_HOME=$ANDROID_SDK
+export NODE_ENV=development
+export MANPATH="/usr/local/man:/usr/local/git/man:$MANPATH"
+
+#cocoapods
+export POD_PATH=`which pod`
+
+# PATH
+export PATH=$HOME/vcode/depot_tools:$PATH
+export PATH=$GOBINS:./bin:./.bin:$HOME/.bin:$HOME/bin:$PATH
+export PATH=$PATH:/usr/local/sbin:$GO_APPENGINE:$ANDROID_SDK/platform-tools:$ANDROID_SDK/tools
+export PATH="$(yarn global bin | grep -o '/.*'):$PATH"
+
+export GO15VENDOREXPERIMENT=1
+
+## Quick open dirs
+p (){ cd ~/projects/$1; }
+compctl -W $HOME/projects/ -/ p
+
+mygo (){ cd $GOCODE/$1; }
+compctl -W $GOCODE/ -/ mygo
+
+tcasego (){ cd $GOCODE/gitlab.neft.tools/tcase/$1; }
+compctl -W $GOCODE/gitlab.neft.tools/tcase/ -/ tcasego
+
+tcase (){ cd ~/test_cases/$1; }
+compctl -W $HOME/test_cases/ -/ tcase
+
+vcode (){ cd ~/vcode/$1; }
+compctl -W $HOME/vcode/ -/ vcode
+
+dotfiles_update () {
+  $HOME/.dotfiles/scripts/install.sh
+  brew upgrade
+}
+
+exip () {
+  # gather external ip address
+  echo -n "Current External IP: "
+  curl -s -m 5 http://myip.dk | grep "ha4" | sed -e 's/.*ha4">//g' -e 's/<\/span>.*//g'
+}
+
+ips () {
+  # determine local IP address
+  ifconfig | grep "inet " | awk '{ print $2 }'
+}
+
+killport () {
+  # portslay:  kill the task active on the specified TCP port
+  kill -9 `lsof -i tcp:$1 | tail -1 | awk '{ print $2;}'`
+}
+
+extract () {
+  if [ -f $1 ] ; then
+    case $1 in
+      *.tar.bz2)        tar xjf $1        ;;
+      *.tar.gz)         tar xzf $1        ;;
+      *.bz2)            bunzip2 $1        ;;
+      *.rar)            unrar x $1        ;;
+      *.gz)             gunzip $1         ;;
+      *.tar)            tar xf $1         ;;
+      *.tbz2)           tar xjf $1        ;;
+      *.tgz)            tar xzf $1        ;;
+      *.zip)            unzip $1          ;;
+      *.Z)              uncompress $1     ;;
+      *)                echo "'$1' cannot be extracted via extract()" ;;
+    esac
+  else
+    echo "'$1' is not a valid file"
+  fi
+}
+#
+## Launch Chrome in App mode
+chrome (){
+  /Applications/Google\ Chrome\ Canary.app/Contents/MacOS/Google\ Chrome\ Canary \
+    --force-app-mode \
+    --enable-crxless-web-apps \
+    --user-data-dir=$TMPDIR \
+    --app=$1
+}
+
+## Docker machine init env
+dm-init (){
+  eval "$(docker-machine env $1)"
+}
+
+[[ -s "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
+
+# Base16 Shell
+
+#$BASE16_SHELL && [[ -s "$HOME/.dotfiles/config/base16-eighties.dark.sh" ]] && source "$HOME/.dotfiles/config/base16-eighties.dark.sh"
+

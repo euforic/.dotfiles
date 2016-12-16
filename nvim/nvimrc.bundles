@@ -1,0 +1,171 @@
+
+" set the runtime path to include Vundle and initialize
+
+call plug#begin('~/.config/nvim/plugged')
+" File Utils
+
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'kien/ctrlp.vim'
+
+" Syntax highlight
+Plug 'uarun/vim-protobuf'
+"
+" GUI
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'chriskempson/base16-vim'
+Plug 'mhartington/oceanic-next'
+Plug 'bufkill.vim'
+Plug 'christoomey/vim-tmux-navigator'
+
+" Git integration
+Plug 'airblade/vim-gitgutter'
+"Plug 'git-time-metric/gtm-vim-plugin'
+
+" Source Utils
+"Plug 'scrooloose/syntastic'
+Plug 'kannokanno/previm'
+Plug 'rizzatti/dash.vim'
+Plug 'neomake/neomake'
+Plug 'Shougo/deoplete.nvim'
+Plug 'zchee/deoplete-go', { 'do': 'make'}
+Plug 'majutsushi/tagbar'
+Plug 'marijnh/tern_for_vim', { 'do' : 'npm install' }
+Plug 'fatih/vim-go'
+Plug 'godlygeek/tabular'
+Plug 'sheerun/vim-polyglot'
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
+Plug 'jparise/vim-graphql'
+Plug 'triglav/vim-visual-increment'
+Plug 'facebook/vim-flow', { 'do': 'npm install -g flow-bin' }
+
+if filereadable(expand("~/.nvimrc.bundles.local"))
+  source ~/.nvimrc.bundles.local
+endif
+
+" All of your Plugins must be added before the following line
+call plug#end()
+
+"call glaive#Install()
+" Optional: Enable codefmt's default mappings on the <Leader>= prefix.
+"Glaive codefmt plugin[mappings]
+
+filetype plugin indent on
+nnoremap <silent> <BS> :TmuxNavigateLeft<cr>
+" ----------------------------------------- "
+" Plug configs 			    			            "
+" ----------------------------------------- "
+
+" ====================  Neomake =================
+let g:neomake_list_height = 5
+"let g:neomake_serialize = 1
+"let g:neomake_verbose = 4
+let g:neomake_open_list = 2
+let g:neomake_javascript_eslint_exe = './node_modules/.bin/eslint'
+let g:neomake_javascript_enabled_makers = ["eslint"]
+let g:neomake_go_enabled_makers = ["go","govet"]
+
+autocmd! BufWritePost * Neomake
+autocmd! QuitPre * let g:neomake_verbose = 0
+
+" ==================== Syntastic ====================
+"let g:syntastic_javascript_checkers = ['eslint', 'flow']
+"let g:jsx_ext_required = 0
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
+"let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+"let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+
+"au FileType go nmap <Leader>sc :SyntasticCheck<cr>
+" ==================== Color Schema =================
+syntax enable
+colorscheme base16-eighties 
+"set background=dark
+
+" ==================== Deoplete ====================
+let g:deoplete#enable_at_startup = 1
+" deoplete tab-complete
+"inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : deoplete#mappings#manual_complete()
+" ,<Tab> for regular tab
+"inoremap <Leader><Tab> <Space><Space>
+autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+
+" ==================== Tern  ====================
+autocmd FileType javascript nnoremap <silent> <buffer> gb :TernDef<CR>
+"
+" ==================== BuffKill ====================
+nnoremap <leader>q :call CloseSplitOrDeleteBuffer()<CR>
+
+" ==================== VimAirline ====================
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#whitespace#enabled = 0
+"
+" ==================== Tagbar ====================
+nnoremap <Leader>t :TagbarToggle<cr>
+
+" ==================== NERDTree ====================
+" For toggling
+noremap <Leader>n :NERDTreeToggle<cr>
+" For refreshing current file and showing current dir
+noremap <Leader>j :NERDTreeFind<cr>
+
+" ==================== CtrlP ====================
+let g:ctrlp_custom_ignore = '\v[\/](node_modules|build)|(\.(git|hg|svn))$'
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_switch_buffer = 'et'	" jump to a file if it's open already
+let g:ctrlp_mruf_max=450 		" number of recently opened files
+let g:ctrlp_max_files=0  		" do not limit the number of searchable files
+
+" ==================== Flow Type =====================
+let g:flow#autoclose = 1
+
+" ==================== Vim Golang =====================
+let g:go_fmt_command = 'goimports'
+"let g:go_highlight_functions = 1
+"let g:go_highlight_methods = 1
+"let g:go_highlight_structs = 1
+"let g:go_highlight_interfaces = 1
+"let g:go_highlight_operators = 1
+"let g:go_highlight_build_constraints = 1
+
+au FileType go nmap <leader>r <Plug>(go-run)
+au FileType go nmap <leader>b <Plug>(go-build)
+au FileType go nmap <leader>gt <Plug>(go-test)
+au FileType go nmap <leader>c <Plug>(go-coverage)
+
+au FileType go nmap <Leader>ds <Plug>(go-def-split)
+au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
+au FileType go nmap <Leader>dt <Plug>(go-def-tab)
+
+au FileType go nmap <Leader>gd <Plug>(go-doc)
+au FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
+au FileType go nmap <Leader>gb <Plug>(go-doc-browser)
+
+au FileType go nmap <Leader>s <Plug>(go-implements)
+au FileType go nmap <Leader>i <Plug>(go-info)
+au FileType go nmap <Leader>e <Plug>(go-rename)
+
+au FileType go nmap <leader>rt <Plug>(go-run-tab)
+au FileType go nmap <Leader>rs <Plug>(go-run-split)
+au FileType go nmap <Leader>rv <Plug>(go-run-vertical)
+
+let g:gtm_plugin_status_enabled = 1
+function! AirlineInit()
+  if exists('*GTMStatusline')
+    call airline#parts#define_function('gtmstatus', 'GTMStatusline')
+    let g:airline_section_b = airline#section#create([g:airline_section_b, ' ', '[', 'gtmstatus', ']'])
+  endif
+endfunction
+autocmd User AirlineAfterInit call AirlineInit()
+
+let g:previm_open_cmd = 'open -a Safari'
+
+" Markdown Live Render
+augroup PrevimSettings
+    autocmd!
+    autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+augroup END
