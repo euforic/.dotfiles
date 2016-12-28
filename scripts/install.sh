@@ -22,7 +22,7 @@ symlink_files() {
 
   # Creating default folders
   printf "\033[0;34mCreating Default Folders\033[0m\n~/projects\n~/vcode\n~/test_cases\n~/go\n"
-  mkdir $HOME/{projects,vcode,test_cases,gocode} &> /dev/null
+  mkdir $HOME/{projects,vcode,test_cases,go} &> /dev/null
 }
 
 printf "\033[0;32m                                            \033[0m\n"
@@ -105,7 +105,8 @@ brew cask install \
   virtualbox \
   docker-machine \
   docker-compose \
-  iterm2 google-chrome \
+  iterm2 \
+  google-chrome \
   google-chrome-canary \
   font-source-code-pro \
   font-source-code-pro-for-powerline
