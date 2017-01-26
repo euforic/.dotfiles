@@ -23,5 +23,5 @@ for file in $(ls ${DIR}); do
 done
 
 # Creating default folders
-printf "\033[0;34mCreating Default Folders\033[0m\n~/projects\n~/code\n~/test_cases\n~/gocode\n"
-mkdir $HOME/{projects,code,test_cases,gocode} &> /dev/null
+printf "\033[0;34mCreating Default Folders\033[0m\n~/projects\n~/vcode\n~/test_cases\n~/go\n"
+mkdir $HOME/{projects,vcode,test_cases,go} &> /dev/null

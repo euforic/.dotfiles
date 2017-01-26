@@ -2,41 +2,38 @@
 " set the runtime path to include Vundle and initialize
 
 call plug#begin('~/.config/nvim/plugged')
-" File Utils
 
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-Plug 'kien/ctrlp.vim'
-
-" Syntax highlight
-Plug 'uarun/vim-protobuf'
-"
 " GUI
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'chriskempson/base16-vim'
-Plug 'mhartington/oceanic-next'
 Plug 'bufkill.vim'
 Plug 'christoomey/vim-tmux-navigator'
 
 " Git integration
 Plug 'airblade/vim-gitgutter'
-"Plug 'git-time-metric/gtm-vim-plugin'
 
 " Source Utils
-"Plug 'scrooloose/syntastic'
-Plug 'kannokanno/previm'
-Plug 'rizzatti/dash.vim'
 Plug 'neomake/neomake'
 Plug 'Shougo/deoplete.nvim'
 Plug 'zchee/deoplete-go', { 'do': 'make'}
-Plug 'majutsushi/tagbar'
-Plug 'marijnh/tern_for_vim', { 'do' : 'npm install' }
+Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
 Plug 'fatih/vim-go'
-Plug 'godlygeek/tabular'
+
+" File Utils
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'kien/ctrlp.vim'
+Plug 'kannokanno/previm'
+Plug 'majutsushi/tagbar'
+
+Plug 'uarun/vim-protobuf'
 Plug 'sheerun/vim-polyglot'
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
 Plug 'jparise/vim-graphql'
+
+Plug 'ternjs/tern_for_vim', { 'do' : 'npm install' }
+Plug 'godlygeek/tabular'
 Plug 'triglav/vim-visual-increment'
 Plug 'facebook/vim-flow', { 'do': 'npm install -g flow-bin' }
 
@@ -59,31 +56,22 @@ nnoremap <silent> <BS> :TmuxNavigateLeft<cr>
 
 " ====================  Neomake =================
 let g:neomake_list_height = 5
+let g:neomake_open_list = 2
 "let g:neomake_serialize = 1
 "let g:neomake_verbose = 4
-let g:neomake_open_list = 2
-let g:neomake_javascript_eslint_exe = './node_modules/.bin/eslint'
+
 let g:neomake_javascript_enabled_makers = ["eslint"]
+let s:eslint_path = system('PATH=$(npm bin):$PATH && which eslint')
+let g:neomake_javascript_eslint_exe = substitute(s:eslint_path, '^\n*\s*\(.\{-}\)\n*\s*$', '\1', '')
+
 let g:neomake_go_enabled_makers = ["go","govet"]
 
 autocmd! BufWritePost * Neomake
 autocmd! QuitPre * let g:neomake_verbose = 0
 
-" ==================== Syntastic ====================
-"let g:syntastic_javascript_checkers = ['eslint', 'flow']
-"let g:jsx_ext_required = 0
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
-"let g:syntastic_check_on_open = 1
-"let g:syntastic_check_on_wq = 0
-"let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
-"let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
-
-"au FileType go nmap <Leader>sc :SyntasticCheck<cr>
 " ==================== Color Schema =================
 syntax enable
 colorscheme base16-eighties 
-"set background=dark
 
 " ==================== Deoplete ====================
 let g:deoplete#enable_at_startup = 1
@@ -94,8 +82,9 @@ let g:deoplete#enable_at_startup = 1
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
 " ==================== Tern  ====================
-autocmd FileType javascript nnoremap <silent> <buffer> gb :TernDef<CR>
-"
+let g:tern_request_timeout = 1
+"autocmd FileType javascript nnoremap <silent> <buffer> gb :TernDef<CR>
+
 " ==================== BuffKill ====================
 nnoremap <leader>q :call CloseSplitOrDeleteBuffer()<CR>
 
@@ -114,7 +103,7 @@ noremap <Leader>n :NERDTreeToggle<cr>
 noremap <Leader>j :NERDTreeFind<cr>
 
 " ==================== CtrlP ====================
-let g:ctrlp_custom_ignore = '\v[\/](node_modules|build)|(\.(git|hg|svn))$'
+let g:ctrlp_custom_ignore = '\v[\/](node_modules|build|vendor)|(\.(git|hg|svn))$'
 let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_switch_buffer = 'et'	" jump to a file if it's open already
 let g:ctrlp_mruf_max=450 		" number of recently opened files
@@ -125,12 +114,6 @@ let g:flow#autoclose = 1
 
 " ==================== Vim Golang =====================
 let g:go_fmt_command = 'goimports'
-"let g:go_highlight_functions = 1
-"let g:go_highlight_methods = 1
-"let g:go_highlight_structs = 1
-"let g:go_highlight_interfaces = 1
-"let g:go_highlight_operators = 1
-"let g:go_highlight_build_constraints = 1
 
 au FileType go nmap <leader>r <Plug>(go-run)
 au FileType go nmap <leader>b <Plug>(go-build)
