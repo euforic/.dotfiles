@@ -7,7 +7,6 @@ call plug#begin('~/.config/nvim/plugged')
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'chriskempson/base16-vim'
-Plug 'bufkill.vim'
 Plug 'christoomey/vim-tmux-navigator'
 
 " Git integration
@@ -17,25 +16,22 @@ Plug 'airblade/vim-gitgutter'
 Plug 'neomake/neomake'
 Plug 'Shougo/deoplete.nvim'
 Plug 'zchee/deoplete-go', { 'do': 'make'}
-Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
+Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern prettier' }
 Plug 'fatih/vim-go'
 
 " File Utils
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-Plug 'kien/ctrlp.vim'
+
+Plug 'ctrlpvim/ctrlp.vim'
 Plug 'kannokanno/previm'
 Plug 'majutsushi/tagbar'
 
 Plug 'uarun/vim-protobuf'
 Plug 'sheerun/vim-polyglot'
-Plug 'pangloss/vim-javascript'
-Plug 'mxw/vim-jsx'
 Plug 'jparise/vim-graphql'
 
 Plug 'ternjs/tern_for_vim', { 'do' : 'npm install' }
-Plug 'godlygeek/tabular'
-Plug 'triglav/vim-visual-increment'
-Plug 'facebook/vim-flow', { 'do': 'npm install -g flow-bin' }
+"Plug 'facebook/vim-flow', { 'do': 'npm install -g flow-bin' }
 
 if filereadable(expand("~/.nvimrc.bundles.local"))
   source ~/.nvimrc.bundles.local
@@ -60,10 +56,12 @@ let g:neomake_open_list = 2
 "let g:neomake_serialize = 1
 "let g:neomake_verbose = 4
 
-let g:neomake_javascript_enabled_makers = ["eslint"]
 let s:eslint_path = system('PATH=$(npm bin):$PATH && which eslint')
-let g:neomake_javascript_eslint_exe = substitute(s:eslint_path, '^\n*\s*\(.\{-}\)\n*\s*$', '\1', '')
+let b:neomake_javascript_eslint_exe = substitute(s:eslint_path, '^\n*\s*\(.\{-}\)\n*\s*$', '\1', '')
+let b:neomake_jsx_eslint_exe = substitute(s:eslint_path, '^\n*\s*\(.\{-}\)\n*\s*$', '\1', '')
 
+let g:neomake_jsx_enabled_makers = ["eslint"]
+let g:neomake_javascript_enabled_makers = ["eslint"]
 let g:neomake_go_enabled_makers = ["go","govet"]
 
 autocmd! BufWritePost * Neomake
@@ -84,9 +82,8 @@ autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 " ==================== Tern  ====================
 let g:tern_request_timeout = 1
 "autocmd FileType javascript nnoremap <silent> <buffer> gb :TernDef<CR>
-
-" ==================== BuffKill ====================
-nnoremap <leader>q :call CloseSplitOrDeleteBuffer()<CR>
+autocmd FileType javascript set formatprg=prettier\ --parser\ flow\ --trailing-comma\ --single-quote\ --stdin
+autocmd BufWritePre *.js exe "normal! gggqG\<C-o>\<C-o>"
 
 " ==================== VimAirline ====================
 let g:airline_powerline_fonts = 1
@@ -108,9 +105,6 @@ let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_switch_buffer = 'et'	" jump to a file if it's open already
 let g:ctrlp_mruf_max=450 		" number of recently opened files
 let g:ctrlp_max_files=0  		" do not limit the number of searchable files
-
-" ==================== Flow Type =====================
-let g:flow#autoclose = 1
 
 " ==================== Vim Golang =====================
 let g:go_fmt_command = 'goimports'
