@@ -82,8 +82,8 @@ autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 " ==================== Tern  ====================
 let g:tern_request_timeout = 1
 "autocmd FileType javascript nnoremap <silent> <buffer> gb :TernDef<CR>
-autocmd FileType javascript set formatprg=prettier\ --parser\ flow\ --trailing-comma\ --single-quote\ --stdin
-autocmd BufWritePre *.js exe "normal! gggqG\<C-o>\<C-o>"
+"autocmd FileType javascript set formatprg=prettier\ --parser\ flow\ --trailing-comma\ --single-quote\ --stdin
+"autocmd BufWritePre *.js exe "normal! gggqG\<C-o>\<C-o>"
 
 " ==================== VimAirline ====================
 let g:airline_powerline_fonts = 1
