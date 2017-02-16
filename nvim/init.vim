@@ -122,7 +122,10 @@ nnoremap <leader>l :bnext<CR>
 nnoremap <leader>b :b
 autocmd BufWinEnter,WinEnter term://* startinsert
 autocmd BufLeave term://* stopinsert
-"
+
+" close buffer but not window
+nmap <leader>c :ene<CR>:bw #<CR>
+
 " Forces you to not use the arrow keys
 map <UP> <NOP>
 map <DOWN> <NOP>

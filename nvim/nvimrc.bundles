@@ -31,7 +31,7 @@ Plug 'sheerun/vim-polyglot'
 Plug 'jparise/vim-graphql'
 
 Plug 'ternjs/tern_for_vim', { 'do' : 'npm install' }
-"Plug 'facebook/vim-flow', { 'do': 'npm install -g flow-bin' }
+Plug 'facebook/vim-flow', { 'do': 'npm install -g flow-bin' }
 
 if filereadable(expand("~/.nvimrc.bundles.local"))
   source ~/.nvimrc.bundles.local
@@ -57,6 +57,15 @@ let g:neomake_open_list = 2
 "let g:neomake_verbose = 4
 
 let g:neomake_go_enabled_makers = ["go","govet"]
+
+let g:javascript_plugin_flow = 1
+let g:flow#enable = 0
+
+" temp disable until flow works with React Native
+"if findfile('.flowconfig', '.;') !=# ''
+"  let g:flow#autoclose = 1
+"  let g:flow#enable = 1
+"endif
 
 if findfile('.eslintrc', '.;') !=# ''
   let g:neomake_javascript_enabled_makers = ['eslint']
