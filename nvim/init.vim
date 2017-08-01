@@ -4,9 +4,10 @@ let mapleader = ","
 set exrc            " enable per-directory .vimrc files
 set secure          " disable unsafe commands in local .vimrc files
 
-" set font
-if has('gui_running')
-  set guifont=Sauce\ Code\ Powerline:h12
+set guifont=Source\ Code\ Pro\ Regular\ 12
+
+if has('mouse')
+  set mouse=a
 endif
 
 set iminsert=0    " Disable capslock"
@@ -31,7 +32,9 @@ set splitbelow " pen new split panes to right and bottom, which feels more natur
 set splitright
 set incsearch                   " Shows the match while typing
 set hlsearch                    " Highlight found searches
-
+set nocursorcolumn           " speed up syntax highlighting
+set nocursorline
+set updatetime=400
 " ----------------------------------------- "
 " File Type settings              "
 " ----------------------------------------- "
@@ -82,6 +85,9 @@ set wildignore+=*.orig                           " Merge resolution files
 " Strip Trailing Whitespace
 nnoremap <Leader>kw :%s/\s\+$//e<CR>
 
+" Close all but the current one
+nnoremap <leader>o :only<CR>
+"
 "Dont show me any output when I build something
 "Because I am using quickfix for errors
 nmap <leader>m :make<CR><enter>

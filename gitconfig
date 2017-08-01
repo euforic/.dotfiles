@@ -10,7 +10,7 @@
   pretty-log = !bash -c 'source ~/.githelpers && git-log-pretty --all'
   pr = "!f() { git fetch origin refs/pull/$1/head:pr/$1; } ; f"
   unstage = reset HEAD
-	appraise = !~/gocode/bin/git-appraise
+	appraise = !~/go/bin/git-appraise
 [color]
   ui = auto
 [color "branch"]
@@ -79,3 +79,6 @@
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	required = true
+[user]
+	name = Christian Sullivan
+	email = cs@bleve.co

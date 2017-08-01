@@ -8,6 +8,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'chriskempson/base16-vim'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'qpkorr/vim-bufkill'
 
 " Git integration
 Plug 'airblade/vim-gitgutter'
@@ -15,9 +16,14 @@ Plug 'airblade/vim-gitgutter'
 " Source Utils
 Plug 'neomake/neomake'
 Plug 'Shougo/deoplete.nvim'
+" JS
+Plug 'ternjs/tern_for_vim', { 'do' : 'npm install', 'for': ['javascript', 'javascript.jsx'] }
+Plug 'carlitux/deoplete-ternjs', { 'for': ['javascript', 'javascript.jsx'] }
+Plug 'facebook/vim-flow', { 'do': 'npm install -g flow-bin' }
+" Golang
 Plug 'zchee/deoplete-go', { 'do': 'make'}
-Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern prettier' }
-Plug 'fatih/vim-go'
+Plug 'fatih/vim-go', {'do': ':GoInstallBinaries'}
+Plug 'jodosha/vim-godebug'
 
 " File Utils
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
@@ -30,8 +36,6 @@ Plug 'uarun/vim-protobuf'
 Plug 'sheerun/vim-polyglot'
 Plug 'jparise/vim-graphql'
 
-Plug 'ternjs/tern_for_vim', { 'do' : 'npm install' }
-Plug 'facebook/vim-flow', { 'do': 'npm install -g flow-bin' }
 
 if filereadable(expand("~/.nvimrc.bundles.local"))
   source ~/.nvimrc.bundles.local
@@ -53,19 +57,13 @@ nnoremap <silent> <BS> :TmuxNavigateLeft<cr>
 " ====================  Neomake =================
 let g:neomake_list_height = 5
 let g:neomake_open_list = 2
+let g:go_jump_to_error = 1
 "let g:neomake_serialize = 1
-"let g:neomake_verbose = 4
+"let g:neomake_verbose = 3
 
 let g:neomake_go_enabled_makers = ["go","govet"]
 
-let g:javascript_plugin_flow = 1
 let g:flow#enable = 0
-
-" temp disable until flow works with React Native
-"if findfile('.flowconfig', '.;') !=# ''
-"  let g:flow#autoclose = 1
-"  let g:flow#enable = 1
-"endif
 
 if findfile('.eslintrc', '.;') !=# ''
   let g:neomake_javascript_enabled_makers = ['eslint']
@@ -74,6 +72,7 @@ if findfile('.eslintrc', '.;') !=# ''
   let b:neomake_jsx_eslint_exe = substitute(s:eslint_path, '^\n*\s*\(.\{-}\)\n*\s*$', '\1', '')
 endif
 
+"autocmd! BufWritePre *.js Neoformat
 autocmd! BufWritePost * Neomake
 autocmd! QuitPre * let g:neomake_verbose = 0
 
@@ -83,17 +82,10 @@ colorscheme base16-eighties
 
 " ==================== Deoplete ====================
 let g:deoplete#enable_at_startup = 1
-" deoplete tab-complete
-"inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : deoplete#mappings#manual_complete()
-" ,<Tab> for regular tab
-"inoremap <Leader><Tab> <Space><Space>
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
 " ==================== Tern  ====================
 let g:tern_request_timeout = 1
-"autocmd FileType javascript nnoremap <silent> <buffer> gb :TernDef<CR>
-"autocmd FileType javascript set formatprg=prettier\ --parser\ flow\ --trailing-comma\ --single-quote\ --stdin
-"autocmd BufWritePre *.js exe "normal! gggqG\<C-o>\<C-o>"
 
 " ==================== VimAirline ====================
 let g:airline_powerline_fonts = 1
@@ -117,7 +109,14 @@ let g:ctrlp_mruf_max=450 		" number of recently opened files
 let g:ctrlp_max_files=0  		" do not limit the number of searchable files
 
 " ==================== Vim Golang =====================
+let g:go_autodetect_gopath = 1
 let g:go_fmt_command = 'goimports'
+if has("nvim")
+    let g:go_term_enabled = 1
+    let g:go_term_mode = "vsplit"
+    let g:go_term_height = 30
+    let g:go_term_width = 30
+endif
 
 au FileType go nmap <leader>r <Plug>(go-run)
 au FileType go nmap <leader>b <Plug>(go-build)
@@ -149,7 +148,7 @@ function! AirlineInit()
 endfunction
 autocmd User AirlineAfterInit call AirlineInit()
 
-let g:previm_open_cmd = 'open -a Safari'
+let g:previm_open_cmd = 'open -a Google\ Chrome'
 
 " Markdown Live Render
 augroup PrevimSettings
