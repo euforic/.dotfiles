@@ -1,44 +1,70 @@
+
 let mapleader = ","
-
-" Allow project specific .vimrc
-set exrc            " enable per-directory .vimrc files
-set secure          " disable unsafe commands in local .vimrc files
-
 set guifont=Source\ Code\ Pro\ Regular\ 12
 
-if has('mouse')
-  set mouse=a
-endif
+set nocompatible
+filetype off
+filetype plugin indent on
 
-set iminsert=0    " Disable capslock"
-set nobackup
-set nowritebackup
-set noswapfile    " http://robots.thoughtbot.com/post/18739402579/global-gitignore#comment-458413287
-set history=50
-set ruler         " show the cursor position all the time
-set showcmd       " display incomplete commands
-set incsearch     " do incremental searching
-set laststatus=2  " Always display the status line
-set autowrite     " Automatically :write before running commands
-set relativenumber 
-set number        " Show line numbers
-set showmode      " Show the current mode
-set tabstop=2     " Softtabs, 2 spaces
-set shiftwidth=2
-set shiftround
-set nowrap
-set expandtab
-set splitbelow " pen new split panes to right and bottom, which feels more natural
-set splitright
+"set ttyfast
+"set ttymouse=xterm2
+"set ttyscroll=3
+
+set iminsert=0                  " Disable capslock"
+set laststatus=2
+set encoding=utf-8              " Set default encoding to UTF-8
+set autoread                    " Automatically reread changed files without asking me anything
+set autoindent                  
+set backspace=indent,eol,start  " Makes backspace key more powerful.
 set incsearch                   " Shows the match while typing
 set hlsearch                    " Highlight found searches
+set mouse=a                     "Enable mouse mode
+
+set tabstop=2                " Softtabs, 2 spaces
+set shiftwidth=2
+set noerrorbells             " No beeps
+set number                   " Show line numbers
+set showcmd                  " Show me what I'm typing
+set noswapfile               " Don't use swapfile
+set nobackup                 " Don't create annoying backup files
+set splitright               " Split vertical windows right to the current windows
+set splitbelow               " Split horizontal windows below to the current windows
+set autowrite                " Automatically save before :next, :make etc.
+set hidden
+set fileformats=unix,dos,mac " Prefer Unix over Windows over OS 9 formats
+set noshowmatch              " Do not show matching brackets by flickering
+set noshowmode               " We show the mode with airline or lightline
+set ignorecase               " Search case insensitive...
+set smartcase                " ... but not it begins with upper case 
+set completeopt=menu,menuone
 set nocursorcolumn           " speed up syntax highlighting
 set nocursorline
-set updatetime=400
+set updatetime=300
+
+set pumheight=10             " Completion window max size
+
+"http://stackoverflow.com/questions/20186975/vim-mac-how-to-copy-to-clipboard-without-pbcopy
+set clipboard^=unnamed
+set clipboard^=unnamedplus
+
+" ~/.viminfo needs to be writable and readable
+set viminfo='200
+
+set lazyredraw          " Wait to redraw
+
+if has('persistent_undo')
+  set undofile
+  set undodir=~/.cache/vim
+endif
+
+" color
+syntax enable
+set t_Co=256
+
 " ----------------------------------------- "
-" File Type settings              "
+"           File Type settings              "
 " ----------------------------------------- "
-"
+
 " Hard code tabs in Makefiles
 au FileType make setlocal noexpandtab
 au FileType go setlocal noexpandtab
@@ -54,109 +80,48 @@ augroup filetypedetect
     au BufNewFile,BufRead .tmux.conf*,tmux.conf* setf tmux
     au BufNewFile,BufRead .nginx.conf*,nginx.conf* setf nginx
 augroup END
+
+" Enter automatically into the files directory
+autocmd BufEnter * silent! lcd %:p:h
  
-" Wildmenu completion {{{
-set wildmenu
-set wildmode=list:longest
-set wildmode=list:full
-
-set wildignore+=*.hg,*.git,*.svn                    " Version control
-set wildignore+=*.aux,*.out,*.toc                " LaTeX intermediate files
-set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg   " binary images
-set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest " compiled object files
-set wildignore+=*.spl                            " compiled spelling word lists
-set wildignore+=*.sw?                            " Vim swap files
-set wildignore+=*.DS_Store                       " OSX bullshit
-set wildignore+=*.luac                           " Lua byte code
-set wildignore+=migrations                       " Django migrations
-set wildignore+=go/pkg                       " Go static files
-set wildignore+=go/bin                       " Go bin files
-set wildignore+=go/bin-vagrant               " Go bin-vagrant files
-set wildignore+=*.pyc                            " Python byte code
-set wildignore+=*.orig                           " Merge resolution files
-
-
-" This trigger takes advantage of the fact that the quickfix window can be
-" easily distinguished by its file-type, qf. The wincmd J command is
-" equivalent to the Ctrl+W, Shift+J shortcut telling Vim to move a window to
-" the very bottom (see :help :wincmd and :help ^WJ).
-"autocmd FileType qf wincmd J
-
-" Strip Trailing Whitespace
-nnoremap <Leader>kw :%s/\s\+$//e<CR>
-
 " Close all but the current one
 nnoremap <leader>o :only<CR>
-"
-"Dont show me any output when I build something
-"Because I am using quickfix for errors
-nmap <leader>m :make<CR><enter>
-
-" Some useful quickfix shortcuts
-":cc      see the current error
-":cn      next error
-":cp      previous error
-":clist   list all errors
-map <C-n> :cn<CR>
-map <C-m> :cp<CR>
-
-" Close quickfix easily
-nnoremap <leader>a :cclose<CR>
 
 " Remove search highlight
 nnoremap <ESC><ESC> :nohl<CR>
 
-" Center the screen
-nnoremap <space> zz
-
-" Quicker window movement
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
-
-tnoremap <C-h> <C-\><C-n><C-w>h
-" Workaround since <C-h> isn't working in neovim right now
-tnoremap <C-w>h <C-\><C-n><C-w>h
-tnoremap <C-j> <C-\><C-n><C-w>j
-tnoremap <C-k> <C-\><C-n><C-w>k
-tnoremap <C-l> <C-\><C-n><C-w>l
+" Better split switching
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
 
 " Move between buffers
 nnoremap <leader>h :bprev<CR>
 nnoremap <leader>l :bnext<CR>
 nnoremap <leader>b :b
-autocmd BufWinEnter,WinEnter term://* startinsert
-autocmd BufLeave term://* stopinsert
+"
+" Search mappings: These will make it so that going to the next one in a
+" search will center on the line it's found in.
+nnoremap n nzzzv
+nnoremap N Nzzzv
 
-" close buffer but not window
-nmap <leader>c :ene<CR>:bw #<CR>
+" Same when moving up and down
+noremap <C-d> <C-d>zz
+noremap <C-u> <C-u>zz
 
-" Forces you to not use the arrow keys
-map <UP> <NOP>
-map <DOWN> <NOP>
-map <LEFT> <NOP>
-map <RIGHT> <NOP>
-inoremap <UP> <NOP>
-inoremap <DOWN> <NOP>
-inoremap <LEFT> <NOP>
-inoremap <RIGHT> <NOP>
-
-" Prettify json
-com! JSONFormat %!python -m json.tool
-
-" Color Theme
-"set background=dark
-
-set spelllang=en_us
-set spellsuggest=best,3
-set dictionary+=/usr/share/dict/words,
-set dictionary+=/usr/share/dict/american-english
-set dictionary+=/usr/share/dict/web2,
-set dictionary+=/usr/share/dict/propernames.gz
-set dictionary+=/usr/share/dict/connectives.gz
-set dictionary+=/usr/share/dict/web2a.gz
-set spellfile=~/.nvim/dict.custom.utf-8.add
+" Time out on key codes but not mappings.
+" Basically this makes terminal Vim work sanely.
+if !has('gui_running')
+  set notimeout
+  set ttimeout
+  set ttimeoutlen=10
+  augroup FastEscape
+    autocmd!
+    au InsertEnter * set timeoutlen=0
+    au InsertLeave * set timeoutlen=1000
+  augroup END
+endif
 
 " Load plugins
 if filereadable(expand("~/.config/nvim/nvimrc.bundles"))

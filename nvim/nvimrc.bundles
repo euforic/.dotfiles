@@ -4,37 +4,25 @@
 call plug#begin('~/.config/nvim/plugged')
 
 " GUI
+Plug 'chriskempson/base16-vim'
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'chriskempson/base16-vim'
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'qpkorr/vim-bufkill'
-
-" Git integration
 Plug 'airblade/vim-gitgutter'
+Plug 'uarun/vim-protobuf'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'tmux-plugins/vim-tmux', {'for': 'tmux'}
+Plug 'qpkorr/vim-bufkill'
+Plug 'kannokanno/previm'
 
 " Source Utils
 Plug 'neomake/neomake'
 Plug 'Shougo/deoplete.nvim'
-" JS
 Plug 'ternjs/tern_for_vim', { 'do' : 'npm install', 'for': ['javascript', 'javascript.jsx'] }
 Plug 'carlitux/deoplete-ternjs', { 'for': ['javascript', 'javascript.jsx'] }
-Plug 'facebook/vim-flow', { 'do': 'npm install -g flow-bin' }
-" Golang
 Plug 'zchee/deoplete-go', { 'do': 'make'}
 Plug 'fatih/vim-go', {'do': ':GoInstallBinaries'}
 Plug 'jodosha/vim-godebug'
-
-" File Utils
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'kannokanno/previm'
-Plug 'majutsushi/tagbar'
-
-Plug 'uarun/vim-protobuf'
-Plug 'sheerun/vim-polyglot'
-Plug 'jparise/vim-graphql'
 
 
 if filereadable(expand("~/.nvimrc.bundles.local"))
@@ -44,12 +32,7 @@ endif
 " All of your Plugins must be added before the following line
 call plug#end()
 
-"call glaive#Install()
-" Optional: Enable codefmt's default mappings on the <Leader>= prefix.
-"Glaive codefmt plugin[mappings]
-
 filetype plugin indent on
-nnoremap <silent> <BS> :TmuxNavigateLeft<cr>
 " ----------------------------------------- "
 " Plug configs 			    			            "
 " ----------------------------------------- "
@@ -58,12 +41,8 @@ nnoremap <silent> <BS> :TmuxNavigateLeft<cr>
 let g:neomake_list_height = 5
 let g:neomake_open_list = 2
 let g:go_jump_to_error = 1
-"let g:neomake_serialize = 1
-"let g:neomake_verbose = 3
 
 let g:neomake_go_enabled_makers = ["go","govet"]
-
-let g:flow#enable = 0
 
 if findfile('.eslintrc', '.;') !=# ''
   let g:neomake_javascript_enabled_makers = ['eslint']
@@ -72,7 +51,6 @@ if findfile('.eslintrc', '.;') !=# ''
   let b:neomake_jsx_eslint_exe = substitute(s:eslint_path, '^\n*\s*\(.\{-}\)\n*\s*$', '\1', '')
 endif
 
-"autocmd! BufWritePre *.js Neoformat
 autocmd! BufWritePost * Neomake
 autocmd! QuitPre * let g:neomake_verbose = 0
 
@@ -91,9 +69,6 @@ let g:tern_request_timeout = 1
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#whitespace#enabled = 0
-"
-" ==================== Tagbar ====================
-nnoremap <Leader>t :TagbarToggle<cr>
 
 " ==================== NERDTree ====================
 " For toggling
@@ -101,43 +76,92 @@ noremap <Leader>n :NERDTreeToggle<cr>
 " For refreshing current file and showing current dir
 noremap <Leader>j :NERDTreeFind<cr>
 
+let NERDTreeShowHidden=1
+
 " ==================== CtrlP ====================
-let g:ctrlp_custom_ignore = '\v[\/](node_modules|build|vendor)|(\.(git|hg|svn))$'
+let g:ctrlp_cmd = 'CtrlPMRU'
 let g:ctrlp_working_path_mode = 'ra'
-let g:ctrlp_switch_buffer = 'et'	" jump to a file if it's open already
-let g:ctrlp_mruf_max=450 		" number of recently opened files
-let g:ctrlp_max_files=0  		" do not limit the number of searchable files
+let g:ctrlp_switch_buffer = 'et'  " jump to a file if it's open already
+let g:ctrlp_mruf_max=450    " number of recently opened files
+let g:ctrlp_max_files=0     " do not limit the number of searchable files
+let g:ctrlp_use_caching = 1
+let g:ctrlp_clear_cache_on_exit = 0
+let g:ctrlp_cache_dir = $HOME.'/.cache/ctrlp'
+let g:ctrlp_match_window = 'bottom,order:btt,max:10,results:10'
+let g:ctrlp_buftag_types = {'go' : '--language-force=go --golang-types=ftv'}
+
+nmap <C-b> :CtrlPCurWD<cr>
+imap <C-b> <esc>:CtrlPCurWD<cr>
+
+" ==================== Vim MD Preview ==================
+let g:previm_open_cmd = 'open -a Google\ Chrome'
+
+" Markdown Live Render
+augroup PrevimSettings
+    autocmd!
+    autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+augroup END
 
 " ==================== Vim Golang =====================
+let g:go_fmt_fail_silently = 0
+let g:go_fmt_command = "goimports"
+let g:go_list_type = "quickfix"
+let g:go_auto_type_info = 0
+let g:go_def_mode = "guru"
+let g:go_echo_command_info = 1
+let g:go_gocode_autobuild = 0
+let g:go_gocode_unimported_packages = 1
+
 let g:go_autodetect_gopath = 1
-let g:go_fmt_command = 'goimports'
-if has("nvim")
-    let g:go_term_enabled = 1
-    let g:go_term_mode = "vsplit"
-    let g:go_term_height = 30
-    let g:go_term_width = 30
-endif
+let g:go_info_mode = "guru"
 
-au FileType go nmap <leader>r <Plug>(go-run)
-au FileType go nmap <leader>b <Plug>(go-build)
-au FileType go nmap <leader>gt <Plug>(go-test)
-au FileType go nmap <leader>c <Plug>(go-coverage)
+" let g:go_metalinter_autosave = 1
+" let g:go_metalinter_autosave_enabled = ['vet', 'golint']
 
-au FileType go nmap <Leader>ds <Plug>(go-def-split)
-au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
-au FileType go nmap <Leader>dt <Plug>(go-def-tab)
+let g:go_highlight_space_tab_error = 0
+let g:go_highlight_array_whitespace_error = 0
+let g:go_highlight_trailing_whitespace_error = 0
+let g:go_highlight_extra_types = 0
+let g:go_highlight_build_constraints = 1
+let g:go_highlight_types = 0
 
-au FileType go nmap <Leader>gd <Plug>(go-doc)
-au FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
-au FileType go nmap <Leader>gb <Plug>(go-doc-browser)
+nmap <C-g> :GoDecls<cr>
+imap <C-g> <esc>:<C-u>GoDecls<cr>
 
-au FileType go nmap <Leader>s <Plug>(go-implements)
-au FileType go nmap <Leader>i <Plug>(go-info)
-au FileType go nmap <Leader>e <Plug>(go-rename)
+" run :GoBuild or :GoTestCompile based on the go file
+function! s:build_go_files()
+  let l:file = expand('%')
+  if l:file =~# '^\f\+_test\.go$'
+    call go#test#Test(0, 1)
+  elseif l:file =~# '^\f\+\.go$'
+    call go#cmd#Build(0)
+  endif
+endfunction
 
-au FileType go nmap <leader>rt <Plug>(go-run-tab)
-au FileType go nmap <Leader>rs <Plug>(go-run-split)
-au FileType go nmap <Leader>rv <Plug>(go-run-vertical)
+augroup go
+  autocmd!
+
+  autocmd FileType go nmap <silent> <Leader>v <Plug>(go-def-vertical)
+  autocmd FileType go nmap <silent> <Leader>s <Plug>(go-def-split)
+
+  autocmd FileType go nmap <silent> <Leader>x <Plug>(go-doc-vertical)
+
+  autocmd FileType go nmap <silent> <Leader>i <Plug>(go-info)
+  autocmd FileType go nmap <silent> <Leader>l <Plug>(go-metalinter)
+
+  autocmd FileType go nmap <silent> <leader>b :<C-u>call <SID>build_go_files()<CR>
+  autocmd FileType go nmap <silent> <leader>t  <Plug>(go-test)
+  autocmd FileType go nmap <silent> <leader>r  <Plug>(go-run)
+  autocmd FileType go nmap <silent> <leader>e  <Plug>(go-install)
+
+  autocmd FileType go nmap <silent> <Leader>c <Plug>(go-coverage-toggle)
+
+  " I like these more!
+  autocmd Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
+  autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
+  autocmd Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
+  autocmd Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
+augroup END
 
 let g:gtm_plugin_status_enabled = 1
 function! AirlineInit()
@@ -147,11 +171,3 @@ function! AirlineInit()
   endif
 endfunction
 autocmd User AirlineAfterInit call AirlineInit()
-
-let g:previm_open_cmd = 'open -a Google\ Chrome'
-
-" Markdown Live Render
-augroup PrevimSettings
-    autocmd!
-    autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
-augroup END

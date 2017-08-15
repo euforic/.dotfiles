@@ -76,8 +76,6 @@ export PATH=$GOBINS:./bin:./.bin:$HOME/.bin:$HOME/bin:$PATH
 export PATH=$PATH:/usr/local/sbin:$GO_APPENGINE:$ANDROID_SDK/platform-tools:$ANDROID_SDK/tools
 export PATH="$(yarn global bin | grep -o '/.*'):$PATH"
 
-export GO15VENDOREXPERIMENT=1
-
 ## Quick open dirs
 p (){ cd ~/projects/$1; }
 compctl -W $HOME/projects/ -/ p
@@ -115,43 +113,4 @@ killport () {
   kill -9 `lsof -i tcp:$1 | tail -1 | awk '{ print $2;}'`
 }
 
-extract () {
-  if [ -f $1 ] ; then
-    case $1 in
-      *.tar.bz2)        tar xjf $1        ;;
-      *.tar.gz)         tar xzf $1        ;;
-      *.bz2)            bunzip2 $1        ;;
-      *.rar)            unrar x $1        ;;
-      *.gz)             gunzip $1         ;;
-      *.tar)            tar xf $1         ;;
-      *.tbz2)           tar xjf $1        ;;
-      *.tgz)            tar xzf $1        ;;
-      *.zip)            unzip $1          ;;
-      *.Z)              uncompress $1     ;;
-      *)                echo "'$1' cannot be extracted via extract()" ;;
-    esac
-  else
-    echo "'$1' is not a valid file"
-  fi
-}
-#
-## Launch Chrome in App mode
-chrome (){
-  /Applications/Google\ Chrome\ Canary.app/Contents/MacOS/Google\ Chrome\ Canary \
-    --force-app-mode \
-    --enable-crxless-web-apps \
-    --user-data-dir=$TMPDIR \
-    --app=$1
-}
-
-## Docker machine init env
-dm-init (){
-  eval "$(docker-machine env $1)"
-}
-
 [[ -s "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
-
-# Base16 Shell
-
-#$BASE16_SHELL && [[ -s "$HOME/.dotfiles/config/base16-eighties.dark.sh" ]] && source "$HOME/.dotfiles/config/base16-eighties.dark.sh"
-
