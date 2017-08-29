@@ -11,8 +11,8 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
 Plug 'uarun/vim-protobuf'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'tmux-plugins/vim-tmux', {'for': 'tmux'}
 Plug 'qpkorr/vim-bufkill'
+Plug 'christoomey/vim-tmux-navigator'
 Plug 'kannokanno/previm'
 
 " Source Utils

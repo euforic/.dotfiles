@@ -21,8 +21,8 @@ symlink_files() {
   done
 
   # Creating default folders
-  printf "\033[0;34mCreating Default Folders\033[0m\n~/projects\n~/vcode\n~/test_cases\n~/go\n"
-  mkdir $HOME/{projects,vcode,test_cases,go} &> /dev/null
+  printf "\033[0;34mCreating Default Folders\033[0m\n~/projects\n~/code\n~/test_cases\n~/go\n"
+  mkdir $HOME/{projects,code,test_cases,go} &> /dev/null
 }
 
 printf "\033[0;32m                                            \033[0m\n"
@@ -186,19 +186,7 @@ defaults write com.apple.loginwindow LoginwindowLaunchesRelaunchApps -bool false
 defaults write NSGlobalDomain KeyRepeat -int 1
 defaults write NSGlobalDomain InitialKeyRepeat -int 10
 
-printf "\033[0;34mFinishing Up...\033[0m"
-
-source ./link.sh
-
 cp $HOME/.dotfiles/config/com.googlecode.iterm2.plist $HOME/Library/Preferences/
-
-# return to starting dir
-popd
-vim +PlugInstall +GoInstallBinaries +qall &> /dev/null
-
-# Setup docker machine xhyve driver
-sudo chown root:wheel $(brew --prefix)/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
-sudo chmod u+s $(brew --prefix)/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
 
 # Create git creds file
 if [ -f $HOME/.gitconfig_local ]
@@ -213,3 +201,13 @@ else
   printf "[user]\n  name=$FULL_NAME\n  email=$EMAIL\n" > ~/.gitconfig_local
 fi
 
+# return to starting dir
+popd
+vim +PlugInstall +GoInstallBinaries +qall &> /dev/null
+
+# Setup docker machine xhyve driver
+sudo chown root:wheel $(brew --prefix)/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
+sudo chmod u+s $(brew --prefix)/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
+
+printf "\033[0;34mFinishing Up...\033[0m"
+source ./link.sh
