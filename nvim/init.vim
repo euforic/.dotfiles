@@ -4,7 +4,6 @@ set guifont=Source\ Code\ Pro\ Regular\ 12
 
 set nocompatible
 filetype off
-filetype plugin indent on
 
 "set ttyfast
 "set ttymouse=xterm2
@@ -19,8 +18,9 @@ set backspace=indent,eol,start  " Makes backspace key more powerful.
 set incsearch                   " Shows the match while typing
 set hlsearch                    " Highlight found searches
 set mouse=a                     "Enable mouse mode
-
+set relativenumber
 set tabstop=2                " Softtabs, 2 spaces
+set expandtab
 set shiftwidth=2
 set noerrorbells             " No beeps
 set number                   " Show line numbers
@@ -40,22 +40,10 @@ set completeopt=menu,menuone
 set nocursorcolumn           " speed up syntax highlighting
 set nocursorline
 set updatetime=300
-
-set pumheight=10             " Completion window max size
-
-"http://stackoverflow.com/questions/20186975/vim-mac-how-to-copy-to-clipboard-without-pbcopy
-set clipboard^=unnamed
-set clipboard^=unnamedplus
-
-" ~/.viminfo needs to be writable and readable
-set viminfo='200
-
 set lazyredraw          " Wait to redraw
-
-if has('persistent_undo')
-  set undofile
-  set undodir=~/.cache/vim
-endif
+set pumheight=10             " Completion window max size
+"http://stackoverflow.com/questions/20186975/vim-mac-how-to-copy-to-clipboard-without-pbcopy
+set clipboard+=unnamedplus
 
 " color
 syntax enable
@@ -81,9 +69,6 @@ augroup filetypedetect
     au BufNewFile,BufRead .nginx.conf*,nginx.conf* setf nginx
 augroup END
 
-" Enter automatically into the files directory
-autocmd BufEnter * silent! lcd %:p:h
- 
 " Close all but the current one
 nnoremap <leader>o :only<CR>
 

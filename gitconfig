@@ -1,13 +1,6 @@
-[user]
-	name = Christian Sullivan
-	email = cs@bleve.co
-
-[github]
-	user = euforic
-
 [core]
 	whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
-	editor = vim
+	editor = nvim
 	quotepath = false
 	excludesfile = ~/.gitignore_global
   attributesfile = ~/.gitattributes
@@ -67,6 +60,7 @@
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	required = true
+	process = git-lfs filter-process
 
 [include]
   path = ~/.gitconfig_local

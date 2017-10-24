@@ -9,20 +9,25 @@ Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
-Plug 'uarun/vim-protobuf'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'qpkorr/vim-bufkill'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'kannokanno/previm'
+Plug 'majutsushi/tagbar'
+Plug 'sheerun/vim-polyglot'
 
 " Source Utils
 Plug 'neomake/neomake'
-Plug 'Shougo/deoplete.nvim'
-Plug 'ternjs/tern_for_vim', { 'do' : 'npm install', 'for': ['javascript', 'javascript.jsx'] }
-Plug 'carlitux/deoplete-ternjs', { 'for': ['javascript', 'javascript.jsx'] }
-Plug 'zchee/deoplete-go', { 'do': 'make'}
-Plug 'fatih/vim-go', {'do': ':GoInstallBinaries'}
-Plug 'jodosha/vim-godebug'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'prettier/vim-prettier', { 'do': 'yarn install', 'for': ['javascript', 'typescript', 'javascript.jsx', 'css', 'less', 'scss', 'graphql'] }
+Plug 'flowtype/vim-flow', { 'do': 'npm -g install flow-bin', 'for': ['javascript', 'javascript.jsx'] }
+Plug 'wokalski/autocomplete-flow', { 'for': ['javascript', 'javascript.jsx'] }
+Plug 'mxw/vim-jsx', { 'for': ['javascript', 'javascript.jsx'] }
+Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
+Plug 'zchee/deoplete-go', { 'do': 'make', 'for': ['go'] }
+Plug 'fatih/vim-go', {'do': ':GoInstallBinaries', 'for': ['go']}
+Plug 'jodosha/vim-godebug', { 'for': ['go'] }
+Plug 'buoto/gotests-vim', { 'do': 'go get -u github.com/cweill/gotests' }
 
 
 if filereadable(expand("~/.nvimrc.bundles.local"))
@@ -62,9 +67,27 @@ colorscheme base16-eighties
 let g:deoplete#enable_at_startup = 1
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
-" ==================== Tern  ====================
-let g:tern_request_timeout = 1
+" ==================== JS  ====================
+let g:flow#autoclose = 1
+let g:flow#enable = 0
 
+autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.graphql Prettier
+
+let g:jsx_ext_required = 0
+let g:prettier#exec_cmd_async = 1
+let g:prettier#autoformat = 0
+" number of spaces per indentation level
+let g:prettier#config#tab_width = 2
+" use tabs over spaces
+let g:prettier#config#use_tabs = 'false'
+" print semicolons
+let g:prettier#config#semi = 'false'
+" single quotes over double quotes
+let g:prettier#config#single_quote = 'true'
+" print spaces between brackets
+let g:prettier#config#bracket_spacing = 'false'
+" none|es5|all
+let g:prettier#config#trailing_comma = 'all'
 " ==================== VimAirline ====================
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
@@ -115,9 +138,6 @@ let g:go_gocode_unimported_packages = 1
 let g:go_autodetect_gopath = 1
 let g:go_info_mode = "guru"
 
-" let g:go_metalinter_autosave = 1
-" let g:go_metalinter_autosave_enabled = ['vet', 'golint']
-
 let g:go_highlight_space_tab_error = 0
 let g:go_highlight_array_whitespace_error = 0
 let g:go_highlight_trailing_whitespace_error = 0
@@ -163,7 +183,7 @@ augroup go
   autocmd Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
 augroup END
 
-let g:gtm_plugin_status_enabled = 1
+"let g:gtm_plugin_status_enabled = 1
 function! AirlineInit()
   if exists('*GTMStatusline')
     call airline#parts#define_function('gtmstatus', 'GTMStatusline')

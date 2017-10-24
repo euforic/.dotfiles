@@ -2,10 +2,9 @@
 
 [[ -s "$HOME/google-cloud-sdk" ]] && source "$HOME/google-cloud-sdk/path.zsh.inc" && source "$HOME/google-cloud-sdk/completion.zsh.inc"
 
-#BASE16_SHELL=true
+export EDITOR="/usr/local/share/nvim"
 
-unalias gb
-#unalias gvt
+#BASE16_SHELL=true
 
 alias rsrc="source $HOME/.zshrc"
 
@@ -14,6 +13,7 @@ alias qq=". $GOPATH/src/github.com/y0ssar1an/q/q.sh"
 alias rmqq="rm $TMPDIR/q"
 
 # vim
+alias vimog="/usr/local/bin/vim"
 alias vi="nvim"
 alias vim="nvim"
 
@@ -61,9 +61,6 @@ export GO_APPENGINE=$HOME/go_appengine
 export GOPATH=$HOME/go
 export GOCODE=$GOPATH/src
 export GOBINS=$GOPATH/bin
-export ANDROID_SDK=/usr/local/opt/android-sdk
-export ANDROID_NDK=/usr/local/opt/android-ndk
-export ANDROID_HOME=$ANDROID_SDK
 export NODE_ENV=development
 export MANPATH="/usr/local/man:/usr/local/git/man:$MANPATH"
 
@@ -72,9 +69,13 @@ export POD_PATH=`which pod`
 
 # PATH
 export PATH=$HOME/vcode/depot_tools:$PATH
-export PATH=$GOBINS:./bin:./.bin:$HOME/.bin:$HOME/bin:$PATH
-export PATH=$PATH:/usr/local/sbin:$GO_APPENGINE:$ANDROID_SDK/platform-tools:$ANDROID_SDK/tools
+export PATH=$PATH:/usr/local/sbin:$GO_APPENGINE
 export PATH="$(yarn global bin | grep -o '/.*'):$PATH"
+export PATH=$GOBINS:./bin:./.bin:$HOME/.bin:$HOME/bin:$PATH
+
+export DOCKER_TLS_VERIFY="1"
+export DOCKER_HOST="tcp://192.168.64.2:2376"
+export DOCKER_CERT_PATH="/Users/euforic/.minikube/certs"
 
 ## Quick open dirs
 p (){ cd ~/projects/$1; }
