@@ -73,9 +73,11 @@ export PATH=$PATH:/usr/local/sbin:$GO_APPENGINE
 export PATH="$(yarn global bin | grep -o '/.*'):$PATH"
 export PATH=$GOBINS:./bin:./.bin:$HOME/.bin:$HOME/bin:$PATH
 
+
 export DOCKER_TLS_VERIFY="1"
 export DOCKER_HOST="tcp://192.168.64.2:2376"
-export DOCKER_CERT_PATH="/Users/euforic/.minikube/certs"
+export DOCKER_CERT_PATH="$HOME/.docker/machine/machines/default"
+export DOCKER_MACHINE_NAME="default"
 
 ## Quick open dirs
 p (){ cd ~/projects/$1; }

@@ -82,38 +82,37 @@ printf "\033[0;34mFetching latest homebrew formulas...\033[0m\n"
 brew update
 
 #install kegs
-brew install \
-  git \
-  zsh \
-  node \
-  tmux \
-  python \
-  go \
-  cmake \
-  watchman \
-  fswatch \
-  docker \
-  ctags\
-  python3 \
-  xhyve \
-  docker-machine-driver-xhyve \
-  the_silver_searcher \
-  reattach-to-user-namespace
+brew install git
+brew install zsh
+brew install node
+brew install tmux
+brew install python
+brew install go
+brew install cmake
+brew install watchman
+brew install fswatch
+brew install docker
+brew install ctags
+brew install protobuf
+brew install python3
+brew install docker-machine
+brew install docker-compose
+brew install xhyve
+brew install docker-machine-driver-xhyve
+brew install the_silver_searcher
+brew install reattach-to-user-namespace
 
 # override system vim
 brew install vim --env-std --override-system-vim
 
 ## Install casks
-brew cask install \
-  vagrant \
-  virtualbox \
-  docker-machine \
-  docker-compose \
-  iterm2 \
-  google-chrome \
-  google-chrome-canary \
-  font-source-code-pro \
-  font-source-code-pro-for-powerline
+brew cask install vagrant
+brew cask install virtualbox
+brew cask install iterm2
+brew cask install google-chrome
+brew cask install google-chrome-canary
+brew cask install font-source-code-pro
+brew cask install font-source-code-pro-for-powerline
 
 ## Install NeoVim
 brew install --HEAD --with-release neovim

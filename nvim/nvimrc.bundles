@@ -99,7 +99,7 @@ noremap <Leader>n :NERDTreeToggle<cr>
 " For refreshing current file and showing current dir
 noremap <Leader>j :NERDTreeFind<cr>
 
-let NERDTreeShowHidden=1
+"let NERDTreeShowHidden=1
 
 " ==================== CtrlP ====================
 let g:ctrlp_cmd = 'CtrlPMRU'
