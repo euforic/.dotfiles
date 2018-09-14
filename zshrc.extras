@@ -34,18 +34,6 @@ alias chrome="$HOME/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrom
 alias safari="open -a Safari"
 alias ff="open -a Firefox"
 
-## Redis
-alias redis-up="redis-server /usr/local/etc/redis.conf > /dev/null &"
-alias redis-down='killall redis-server'
-
-# Mongo
-alias mongo-up="mongod &> /dev/null &"
-alias mongo-down='killall mongod'
-
-# Postgres
-alias postgres-up="postgres -D /usr/local/var/postgres &> /dev/null &"
-alias postgres-down="killall postgres"
-
 # Remove the hosts that I don't want to keep around- in this case, only
 # keep the first host.
 alias hosts="head -2 ~/.ssh/known_hosts | tail -1 > ~/.ssh/known_hosts"
@@ -57,7 +45,6 @@ alias pubkey="more ~/.ssh/id_rsa.pub | pbcopy | echo '=> Public key copied to pa
 export NVIM_TUI_ENABLE_TRUE_COLOR=1
 #export TERM="xterm-256color"
 export HOMEBREW_CELLAR="/usr/local/Cellar"
-export GO_APPENGINE=$HOME/go_appengine
 export GOPATH=$HOME/go
 export GOCODE=$GOPATH/src
 export GOBINS=$GOPATH/bin
@@ -68,8 +55,6 @@ export MANPATH="/usr/local/man:/usr/local/git/man:$MANPATH"
 export POD_PATH=`which pod`
 
 # PATH
-export PATH=$HOME/vcode/depot_tools:$PATH
-export PATH=$PATH:/usr/local/sbin:$GO_APPENGINE
 export PATH="$(yarn global bin | grep -o '/.*'):$PATH"
 export PATH=$GOBINS:./bin:./.bin:$HOME/.bin:$HOME/bin:$PATH
 
@@ -85,9 +70,6 @@ compctl -W $HOME/projects/ -/ p
 
 mygo (){ cd $GOCODE/$1; }
 compctl -W $GOCODE/ -/ mygo
-
-tcasego (){ cd $GOCODE/gitlab.neft.tools/tcase/$1; }
-compctl -W $GOCODE/gitlab.neft.tools/tcase/ -/ tcasego
 
 tcase (){ cd ~/test_cases/$1; }
 compctl -W $HOME/test_cases/ -/ tcase
