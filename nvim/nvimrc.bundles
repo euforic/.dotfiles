@@ -53,8 +53,13 @@ let g:neomake_open_list = 2
 let g:go_jump_to_error = 1
 
 let g:neomake_go_enabled_makers = ["go","govet"]
-let g:neomake_cpp_gcc_maker= {'args': ['-Wall', '-Iinclude', '-I /usr/local/Cellar/eos/HEAD-53d8771/lib/', '-Wextra', '-Weverything', '-pedantic', '-Wno-sign-conversion'], 'exe': 'g++'}                                              
-let g:neomake_cpp_enabled_makers = ['gcc']
+
+let g:neomake_cpp_eosio_maker = {
+    \ 'exe': 'eosio-cpp',
+    \ 'args': ['-I/usr/local/eosio.cdt/include', '-o', g:neomake#compat#dev_null],
+    \ 'errorformat': '%f:%l:%c: %m',
+    \ }
+let g:neomake_cpp_enabled_makers = ['eosio']
 
 autocmd! BufWritePost * Neomake
 autocmd! QuitPre * let g:neomake_verbose = 0
@@ -67,6 +72,10 @@ colorscheme base16-eighties
 " ==================== Deoplete ====================
 let g:deoplete#enable_at_startup = 1
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+
+let g:deoplete#sources#clang#flags = [
+      \ "-I/usr/local/eosio.ctd/include",
+      \ ]
 
 " ==================== JS  ====================
 let g:flow#autoclose = 1
