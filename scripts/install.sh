@@ -132,11 +132,10 @@ printf "\033[0;34mInstalling Go tools\033[0m\n"
 go get github.com/mitchellh/gox
 go get golang.org/x/tools/...
 go get github.com/mholt/caddy
-go get github.com/google/git-appraise/git-appraise
 
 printf "\033[0;34mInstalling Node Modules\033[0m\n"
 # Install modules
-npm -g install eslint babel babel-eslint eslint-plugin-react eslint-plugin-babel webpack yarn n git+https://github.com/ramitos/jsctags.git &> /dev/null
+npm -g install babel parcel webpack yarn &> /dev/null
 
 printf "\033[0;34mInstalling Vim Plugins\033[0m\n"
 # Install vim bundles for vim

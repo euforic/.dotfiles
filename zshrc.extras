@@ -57,7 +57,8 @@ export POD_PATH=`which pod`
 # PATH
 export PATH="$(yarn global bin | grep -o '/.*'):$PATH"
 export PATH=$GOBINS:./bin:./.bin:$HOME/.bin:$HOME/bin:$PATH
-
+export PATH=$PATH:$HOME/.cargo/bin
+export PATH=$PATH:$HOME/.deno/bin
 
 export DOCKER_TLS_VERIFY="1"
 export DOCKER_HOST="tcp://192.168.64.2:2376"
@@ -99,3 +100,4 @@ killport () {
 }
 
 [[ -s "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
+export PATH="/usr/local/sbin:$PATH"

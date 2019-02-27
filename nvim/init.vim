@@ -60,6 +60,7 @@ au FileType markdown,gitcommit set spell
 
 au BufNewFile,BufRead *.vim setlocal noet ts=2 sw=2 sts=2
 au BufNewFile,BufRead *.go setlocal noet ts=2 sw=2
+autocmd BufNewFile,BufRead *.swift set filetype=swift
 
 augroup filetypedetect
     au BufNewFile,BufRead *.swift setf swift

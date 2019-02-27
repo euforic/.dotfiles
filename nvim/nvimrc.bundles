@@ -20,17 +20,23 @@ Plug 'neomake/neomake'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'zchee/deoplete-clang'
 Plug 'Shougo/neoinclude.vim'
-Plug 'prettier/vim-prettier', { 'do': 'yarn install', 'for': ['javascript', 'typescript', 'javascript.jsx', 'css', 'less', 'scss', 'graphql'] }
-Plug 'leafgarland/typescript-vim', { 'for': ['typescript', 'javascript.ts', 'ts', 'javascript.tsx'] }
+Plug 'HerringtonDarkholme/yats.vim'
+Plug 'mhartington/nvim-typescript' , { 'do': './install.sh', 'for': ['typescript', 'typescript.tsx'] }
+Plug 'Shougo/denite.nvim'
+Plug 'apple/swift', {'rtp': 'utils/vim/'} ", { 'for': ['swift'] }
+Plug 'mitsuse/autocomplete-swift' ", { 'for': ['swift'] }
+
+Plug 'prettier/vim-prettier', {
+  \ 'do': 'yarn install',
+  \ 'for': ['javascript', 'javascript.jsx', 'typescript', 'typescript.tsx', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
 Plug 'mxw/vim-jsx', { 'for': ['javascript', 'javascript.jsx'] }
-Plug 'mhartington/deoplete-typescript', { 'do': 'npm install -g typescript', 'for': ['typescript', 'ts','javascript.tsx'],  }
-Plug 'mhartington/nvim-typescript', { 'for': ['typescript', 'ts', 'javascript.tsx'] }
-Plug 'Quramy/tsuquyomi', { 'for': ['javascript', 'typescript', 'ts', 'javascript.ts','javascript.tsx'] }
 Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'zchee/deoplete-go', { 'do': 'make', 'for': ['go'] }
 Plug 'fatih/vim-go', {'do': ':GoUpdateBinaries', 'for': ['go']}
 Plug 'jodosha/vim-godebug', { 'for': ['go'] }
 Plug 'buoto/gotests-vim', { 'do': 'go get -u github.com/cweill/gotests' }
+Plug 'rust-lang/rust.vim', { 'for': ['rust'] }
+Plug 'racer-rust/vim-racer', { 'for': ['rust'] }
 Plug 'sheerun/vim-polyglot'
 
 
@@ -47,19 +53,23 @@ filetype plugin indent on
 " Plug configs 			    			            "
 " ----------------------------------------- "
 
+"================== Swift ======================
+autocmd FileType swift imap <buffer> <C-k> <Plug>(autocomplete_swift_jump_to_placeholder)
+let g:deoplete#sources#swift#daemon_autostart = 1
+
+" ================ Rust ========================
+let g:rustfmt_autosave = 1
+
 " ====================  Neomake =================
 let g:neomake_list_height = 5
 let g:neomake_open_list = 2
 let g:go_jump_to_error = 1
 
-let g:neomake_go_enabled_makers = ["go","govet"]
+let g:neomake_go_enabled_makers = ["go", "govet"]
 
-let g:neomake_cpp_eosio_maker = {
-    \ 'exe': 'eosio-cpp',
-    \ 'args': ['-I/usr/local/eosio.cdt/include', '-o', g:neomake#compat#dev_null],
-    \ 'errorformat': '%f:%l:%c: %m',
-    \ }
-let g:neomake_cpp_enabled_makers = ['eosio']
+let g:neomake_place_signs = 1
+
+let g:neomake_javascript_enabled_makers = []
 
 autocmd! BufWritePost * Neomake
 autocmd! QuitPre * let g:neomake_verbose = 0
@@ -73,16 +83,7 @@ colorscheme base16-eighties
 let g:deoplete#enable_at_startup = 1
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
-let g:deoplete#sources#clang#flags = [
-      \ "-I/usr/local/eosio.ctd/include",
-      \ ]
-
 " ==================== JS  ====================
-let g:flow#autoclose = 1
-let g:flow#enable = 0
-
-autocmd BufWritePre *.js,*.jsx,*.mjs,*.css,*.less,*.scss,*.graphql Prettier
-
 let g:jsx_ext_required = 0
 let g:prettier#exec_cmd_async = 1
 let g:prettier#autoformat = 0
@@ -98,6 +99,8 @@ let g:prettier#config#single_quote = 'true'
 let g:prettier#config#bracket_spacing = 'false'
 " none|es5|all
 let g:prettier#config#trailing_comma = 'all'
+autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html Prettier
+
 " ==================== VimAirline ====================
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
@@ -108,8 +111,6 @@ let g:airline#extensions#whitespace#enabled = 0
 noremap <Leader>n :NERDTreeToggle<cr>
 " For refreshing current file and showing current dir
 noremap <Leader>j :NERDTreeFind<cr>
-
-"let NERDTreeShowHidden=1
 
 " ==================== CtrlP ====================
 let g:ctrlp_cmd = 'CtrlPMRU'
@@ -138,8 +139,8 @@ augroup END
 " ==================== Vim Golang =====================
 let g:go_fmt_fail_silently = 1
 let g:go_fmt_options = {
-  \ 'goimports': '-local do/',
-  \ }
+\ 'goimports': '-local do/',
+\}
 
 let g:go_debug_windows = {
       \ 'vars':  'leftabove 35vnew',
@@ -151,7 +152,7 @@ let g:go_fmt_command = "goimports"
 let g:go_info_mode='guru'
 let g:go_autodetect_gopath = 1
 let g:go_gocode_autobuild = 1
-"let g:go_list_type = "quickfix"
+let g:go_list_type = "quickfix"
 let g:go_test_prepend_name = 1
 
 let g:go_highlight_types = 1
@@ -161,27 +162,7 @@ let g:go_highlight_methods = 1
 let g:go_highlight_extra_types = 1
 let g:go_highlight_generate_tags = 1
 let g:go_highlight_build_constraints = 1
-
-let g:go_metalinter_autosave = 1
-let g:go_metalinter_autosave_enabled = ['vet', 'golint']
-let g:go_metalinter_deadline = "5s"
-
-let g:go_auto_type_info = 1
-"""""""""""""
-
-"let g:go_fmt_command = "goimports"
-"let g:go_list_type = "quickfix"
-"let g:go_echo_command_info = 1
-"
-"let g:go_metalinter_autosave_enabled = ['vet', 'golint']
-"let g:go_highlight_space_tab_error = 0
-"let g:go_highlight_array_whitespace_error = 0
-"let g:go_highlight_trailing_whitespace_error = 0
-"let g:go_highlight_extra_types = 0
-"let g:go_highlight_build_constraints = 1
-""let g:go_highlight_types = 0
-""let g:go_highlight_format_strings = 0
-"let g:go_fold_enable = []
+let g:go_auto_type_info = 0
 
 nmap <C-g> :GoDecls<cr>
 imap <C-g> <esc>:<C-u>GoDecls<cr>
