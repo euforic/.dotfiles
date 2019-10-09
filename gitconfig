@@ -42,7 +42,7 @@
 [branch]
 	autosetuprebase = always
 [pull]
-	rebase = preserve
+	rebase = true 
 [http]
   postBuffer = 524288000
 	cookiefile = ~/.gitcookies
@@ -65,5 +65,4 @@
 [include]
   path = ~/.gitconfig_local
 
-[user]
-	signingkey = C6FC3B0A155C33ED
+

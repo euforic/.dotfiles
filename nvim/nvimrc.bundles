@@ -6,6 +6,7 @@ call plug#begin('~/.config/nvim/plugged')
 " GUI
 Plug 'chriskempson/base16-vim'
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'Shougo/defx.nvim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
@@ -18,26 +19,33 @@ Plug 'majutsushi/tagbar'
 " Source Utils
 Plug 'neomake/neomake'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'zchee/deoplete-clang'
+Plug 'sheerun/vim-polyglot'
 Plug 'Shougo/neoinclude.vim'
-Plug 'HerringtonDarkholme/yats.vim'
-Plug 'mhartington/nvim-typescript' , { 'do': './install.sh', 'for': ['typescript', 'typescript.tsx'] }
 Plug 'Shougo/denite.nvim'
-Plug 'apple/swift', {'rtp': 'utils/vim/'} ", { 'for': ['swift'] }
-Plug 'mitsuse/autocomplete-swift' ", { 'for': ['swift'] }
+
+
+Plug 'Shougo/neoinclude.vim', { 'for': ['c', 'cpp', 'objc', 'objcpp'] }
+Plug 'deoplete-plugins/deoplete-clang', { 'for': ['c', 'cpp', 'objc', 'objcpp'] }
+Plug 'rhysd/vim-clang-format', { 'for': ['c', 'cpp', 'objc', 'objcpp'] }
+
+Plug 'HerringtonDarkholme/yats.vim', { 'for': ['typescript', 'typescript.tsx'] }
+Plug 'mhartington/nvim-typescript' , { 'do': './install.sh', 'for': ['typescript', 'typescript.tsx'] }
 
 Plug 'prettier/vim-prettier', {
   \ 'do': 'yarn install',
-  \ 'for': ['javascript', 'javascript.jsx', 'typescript', 'typescript.tsx', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
+  \ 'for': ['javascript', 'javascript.jsx', 'typescript', 'typescript.tsx', 'css', 'less', 'scss', 'json', 'graphql','rust', 'yaml', 'markdown', 'vue', 'html'] }
 Plug 'mxw/vim-jsx', { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
-Plug 'zchee/deoplete-go', { 'do': 'make', 'for': ['go'] }
+
+
 Plug 'fatih/vim-go', {'do': ':GoUpdateBinaries', 'for': ['go']}
+Plug 'zchee/deoplete-go', { 'do': 'make', 'for': ['go'] }
 Plug 'jodosha/vim-godebug', { 'for': ['go'] }
-Plug 'buoto/gotests-vim', { 'do': 'go get -u github.com/cweill/gotests' }
-Plug 'rust-lang/rust.vim', { 'for': ['rust'] }
-Plug 'racer-rust/vim-racer', { 'for': ['rust'] }
-Plug 'sheerun/vim-polyglot'
+Plug 'buoto/gotests-vim', { 'do': 'go get -u github.com/cweill/gotests', 'for': ['go']}
+
+Plug 'rust-lang/rust.vim', { 'for': 'rust' }
+Plug 'racer-rust/vim-racer', { 'for': 'rust' }
+
 
 
 if filereadable(expand("~/.nvimrc.bundles.local"))
@@ -53,13 +61,35 @@ filetype plugin indent on
 " Plug configs 			    			            "
 " ----------------------------------------- "
 
+"================== C++ Objective-C ==============
+let g:deoplete#sources#clang#std = { 'c': 'c11', 'cpp': 'c++14', 'objc': 'c11', 'objcpp': 'c++1z', }
+let g:deoplete#sources#clang#flags = ['-darwin=10.xx']
+let g:deoplete#sources#clang#autofill_neomake = 1
+let g:clang_format#auto_format = 1
+let g:clang_format#style_options = {
+            \ "AccessModifierOffset" : -4,
+            \ "AllowShortIfStatementsOnASingleLine" : "true",
+            \ "AlwaysBreakTemplateDeclarations" : "true",
+            \ "Standard" : "C++11",
+            \ "BreakBeforeBraces" : "Attach"}
 "================== Swift ======================
 autocmd FileType swift imap <buffer> <C-k> <Plug>(autocomplete_swift_jump_to_placeholder)
 let g:deoplete#sources#swift#daemon_autostart = 1
 
 " ================ Rust ========================
-let g:rustfmt_autosave = 1
+au BufNewFile,BufRead *.rs setlocal noet ts=2 sw=2
 
+" Racer is here
+"let g:racer_cmd = '~/.cargo/bin/racer'
+let g:racer_experimental_completer = 1
+" Let's define completion sources for rust
+if executable("rls")
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'rls',
+        \ 'cmd': { server_info->['rls']},
+        \ 'whitelist': ['rust'],
+    \ })
+endif
 " ====================  Neomake =================
 let g:neomake_list_height = 5
 let g:neomake_open_list = 2
@@ -99,8 +129,9 @@ let g:prettier#config#single_quote = 'true'
 let g:prettier#config#bracket_spacing = 'false'
 " none|es5|all
 let g:prettier#config#trailing_comma = 'all'
-autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html Prettier
-
+autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.yml,*.html,*.rs Prettier
+au BufNewFile,BufRead *.ts setlocal filetype=typescript
+au BufNewFile,BufRead *.tsx setlocal filetype=typescript.tsx
 " ==================== VimAirline ====================
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1

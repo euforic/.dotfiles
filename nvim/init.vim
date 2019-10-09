@@ -74,12 +74,6 @@ nnoremap <leader>o :only<CR>
 " Remove search highlight
 nnoremap <ESC><ESC> :nohl<CR>
 
-" Better split switching
-map <C-j> <C-W>j
-map <C-k> <C-W>k
-map <C-h> <C-W>h
-map <C-l> <C-W>l
-
 " Move between buffers
 nnoremap <leader>h :bprev<CR>
 nnoremap <leader>l :bnext<CR>
@@ -113,7 +107,12 @@ if filereadable(expand("~/.config/nvim/nvimrc.bundles"))
 endif
 
 " Local config
+if filereadable($HOME . "~/.config/nvim/veonim")
+  source ~/.config/nvim/veonim
+endif
+
+
+" Local config
 if filereadable($HOME . "~/.nvimrc.local")
   source ~/.nvimrc.local
 endif
-

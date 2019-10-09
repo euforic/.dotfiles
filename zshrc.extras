@@ -1,5 +1,9 @@
 # System
 
+alias python=/usr/local/bin/python3
+
+if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then . $HOME/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+
 [[ -s "$HOME/google-cloud-sdk" ]] && source "$HOME/google-cloud-sdk/path.zsh.inc" && source "$HOME/google-cloud-sdk/completion.zsh.inc"
 
 export EDITOR="/usr/local/share/nvim"
@@ -60,10 +64,10 @@ export PATH=$GOBINS:./bin:./.bin:$HOME/.bin:$HOME/bin:$PATH
 export PATH=$PATH:$HOME/.cargo/bin
 export PATH=$PATH:$HOME/.deno/bin
 
-export DOCKER_TLS_VERIFY="1"
-export DOCKER_HOST="tcp://192.168.64.2:2376"
-export DOCKER_CERT_PATH="$HOME/.docker/machine/machines/default"
-export DOCKER_MACHINE_NAME="default"
+#export DOCKER_TLS_VERIFY="1"
+#export DOCKER_HOST="tcp://192.168.64.2:2376"
+#export DOCKER_CERT_PATH="$HOME/.docker/machine/machines/default"
+#export DOCKER_MACHINE_NAME="default"
 
 ## Quick open dirs
 p (){ cd ~/projects/$1; }
@@ -75,8 +79,8 @@ compctl -W $GOCODE/ -/ mygo
 tcase (){ cd ~/test_cases/$1; }
 compctl -W $HOME/test_cases/ -/ tcase
 
-vcode (){ cd ~/vcode/$1; }
-compctl -W $HOME/vcode/ -/ vcode
+code (){ cd ~/code/$1; }
+compctl -W $HOME/code/ -/ code
 
 dotfiles_update () {
   $HOME/.dotfiles/scripts/install.sh

@@ -41,7 +41,6 @@ node_modules
 .private
 *.private
 .tern-port
-build
 bower_components
 *.sublime-project
 *.sublime-workspace
