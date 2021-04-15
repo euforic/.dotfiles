@@ -1,0 +1,239 @@
+
+" set the runtime path to include Vundle and initialize
+
+call plug#begin('~/.config/nvim/plugged')
+
+" GUI
+Plug 'chriskempson/base16-vim'
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'Shougo/defx.nvim'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'airblade/vim-gitgutter'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'qpkorr/vim-bufkill'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'kannokanno/previm'
+Plug 'majutsushi/tagbar'
+
+" Source Utils
+Plug 'neomake/neomake'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'sheerun/vim-polyglot'
+Plug 'Shougo/neoinclude.vim'
+Plug 'Shougo/denite.nvim'
+
+
+Plug 'Shougo/neoinclude.vim', { 'for': ['c', 'cpp', 'objc', 'objcpp'] }
+Plug 'deoplete-plugins/deoplete-clang', { 'for': ['c', 'cpp', 'objc', 'objcpp'] }
+Plug 'rhysd/vim-clang-format', { 'for': ['c', 'cpp', 'objc', 'objcpp'] }
+
+
+Plug 'prettier/vim-prettier', {
+  \ 'do': 'yarn install',
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
+Plug 'mxw/vim-jsx', { 'for': ['javascript', 'javascript.jsx'] }
+Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
+
+
+Plug 'fatih/vim-go', {'do': ':GoUpdateBinaries', 'for': ['go']}
+Plug 'jodosha/vim-godebug', { 'for': ['go'] }
+Plug 'buoto/gotests-vim', { 'do': 'go get -u github.com/cweill/gotests', 'for': ['go']}
+
+Plug 'rust-lang/rust.vim', { 'for': 'rust' }
+Plug 'racer-rust/vim-racer', { 'for': 'rust' }
+
+Plug 'HerringtonDarkholme/yats.vim'
+Plug 'mhartington/nvim-typescript', {'for': ['typescript', 'tsx'], 'do': './install.sh' }
+
+
+if filereadable(expand("~/.nvimrc.bundles.local"))
+  source ~/.nvimrc.bundles.local
+endif
+
+" All of your Plugins must be added before the following line
+call plug#end()
+
+
+filetype plugin indent on
+" ----------------------------------------- "
+" Plug configs 			    			            "
+" ----------------------------------------- "
+
+"================== C++ Objective-C ==============
+let g:deoplete#sources#clang#std = { 'c': 'c11', 'cpp': 'c++14', 'objc': 'c11', 'objcpp': 'c++1z', }
+let g:deoplete#sources#clang#flags = ['-darwin=10.xx']
+let g:deoplete#sources#clang#autofill_neomake = 1
+let g:clang_format#auto_format = 1
+let g:clang_format#style_options = {
+            \ "AccessModifierOffset" : -4,
+            \ "AllowShortIfStatementsOnASingleLine" : "true",
+            \ "AlwaysBreakTemplateDeclarations" : "true",
+            \ "Standard" : "C++11",
+            \ "BreakBeforeBraces" : "Attach"}
+"================== Swift ======================
+autocmd FileType swift imap <buffer> <C-k> <Plug>(autocomplete_swift_jump_to_placeholder)
+let g:deoplete#sources#swift#daemon_autostart = 1
+
+" ================ Rust ========================
+au BufNewFile,BufRead *.rs setlocal noet ts=2 sw=2
+
+" Racer is here
+"let g:racer_cmd = '~/.cargo/bin/racer'
+let g:racer_experimental_completer = 1
+" Let's define completion sources for rust
+if executable("rls")
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'rls',
+        \ 'cmd': { server_info->['rls']},
+        \ 'whitelist': ['rust'],
+    \ })
+endif
+" ====================  Neomake =================
+let g:neomake_list_height = 5
+let g:neomake_open_list = 2
+let g:go_jump_to_error = 1
+
+let g:neomake_go_enabled_makers = ["go", "govet"]
+
+let g:neomake_place_signs = 1
+
+let g:neomake_javascript_enabled_makers = []
+
+autocmd! BufWritePost * Neomake
+autocmd! QuitPre * let g:neomake_verbose = 0
+
+" ==================== Color Schema =================
+syntax enable
+set termguicolors
+colorscheme base16-eighties 
+
+" ==================== Deoplete ====================
+let g:deoplete#enable_at_startup = 1
+autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+
+" ==================== JS  ====================
+let g:jsx_ext_required = 0
+let g:prettier#exec_cmd_async = 1
+let g:prettier#autoformat = 0
+" number of spaces per indentation level
+let g:prettier#config#tab_width = 2
+" use tabs over spaces
+let g:prettier#config#use_tabs = 'false'
+" print semicolons
+let g:prettier#config#semi = 'false'
+" single quotes over double quotes
+let g:prettier#config#single_quote = 'true'
+" print spaces between brackets
+let g:prettier#config#bracket_spacing = 'false'
+" none|es5|all
+let g:prettier#config#trailing_comma = 'all'
+"au BufNewFile,BufRead *.ts setlocal filetype=typescript
+"au BufNewFile,BufRead *.tsx setlocal filetype=typescript.tsx
+" ==================== VimAirline ====================
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#whitespace#enabled = 0
+
+" ==================== NERDTree ====================
+" For toggling
+noremap <Leader>n :NERDTreeToggle<cr>
+" For refreshing current file and showing current dir
+noremap <Leader>j :NERDTreeFind<cr>
+
+" ==================== CtrlP ====================
+let g:ctrlp_cmd = 'CtrlPMRU'
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_switch_buffer = 'et'  " jump to a file if it's open already
+let g:ctrlp_mruf_max=450    " number of recently opened files
+let g:ctrlp_max_files=0     " do not limit the number of searchable files
+let g:ctrlp_use_caching = 1
+let g:ctrlp_clear_cache_on_exit = 0
+let g:ctrlp_cache_dir = $HOME.'/.cache/ctrlp'
+let g:ctrlp_match_window = 'bottom,order:btt,max:10,results:10'
+let g:ctrlp_buftag_types = {'go' : '--language-force=go --golang-types=ftv'}
+
+nmap <C-b> :CtrlPCurWD<cr>
+imap <C-b> <esc>:CtrlPCurWD<cr>
+
+" ==================== Vim MD Preview ==================
+let g:previm_open_cmd = 'open -a Google\ Chrome'
+
+" Markdown Live Render
+augroup PrevimSettings
+    autocmd!
+    autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+augroup END
+
+" ==================== Vim Golang =====================
+call deoplete#custom#option('omni_patterns', {
+\ 'go': '[^. *\t]\.\w*',
+\})
+
+let g:go_fmt_fail_silently = 1
+let g:go_imports_autosave = 1
+let g:go_fmt_options = {
+\ 'goimports': '-local do/',
+\}
+
+let g:go_debug_windows = {
+      \ 'vars':  'leftabove 35vnew',
+      \ 'stack': 'botright 10new',
+\ }
+
+
+let g:go_autodetect_gopath = 1
+let g:go_list_type = "quickfix"
+let g:go_test_prepend_name = 1
+
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_generate_tags = 1
+let g:go_highlight_build_constraints = 1
+let g:go_auto_type_info = 0
+
+nmap <C-g> :GoDecls<cr>
+imap <C-g> <esc>:<C-u>GoDecls<cr>
+
+" run :GoBuild or :GoTestCompile based on the go file
+function! s:build_go_files()
+  let l:file = expand('%')
+  if l:file =~# '^\f\+_test\.go$'
+    call go#test#Test(0, 1)
+  elseif l:file =~# '^\f\+\.go$'
+    call go#cmd#Build(0)
+  endif
+endfunction
+
+augroup go
+  autocmd!
+
+  autocmd FileType go nmap <silent> <Leader>v <Plug>(go-def-vertical)
+  autocmd FileType go nmap <silent> <Leader>s <Plug>(go-def-split)
+  autocmd FileType go nmap <silent> <Leader>x <Plug>(go-doc-vertical)
+  autocmd FileType go nmap <silent> <Leader>i <Plug>(go-info)
+  autocmd FileType go nmap <silent> <Leader>l <Plug>(go-metalinter)
+  autocmd FileType go nmap <silent> <leader>b :<C-u>call <SID>build_go_files()<CR>
+  autocmd FileType go nmap <silent> <leader>t  <Plug>(go-test)
+  autocmd FileType go nmap <silent> <leader>r  <Plug>(go-run)
+  autocmd FileType go nmap <silent> <leader>e  <Plug>(go-install)
+  autocmd FileType go nmap <silent> <Leader>c <Plug>(go-coverage-toggle)
+
+  " I like these more!
+  autocmd Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
+  autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
+  autocmd Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
+  autocmd Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
+augroup END
+
+"let g:gtm_plugin_status_enabled = 1
+function! AirlineInit()
+  if exists('*GTMStatusline')
+    call airline#parts#define_function('gtmstatus', 'GTMStatusline')
+    let g:airline_section_b = airline#section#create([g:airline_section_b, ' ', '[', 'gtmstatus', ']'])
+  endif
+endfunction
+autocmd User AirlineAfterInit call AirlineInit()

@@ -1,0 +1,76 @@
+[core]
+	whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
+	editor = nvim
+	quotepath = false
+	excludesfile = ~/.gitignore_global
+  attributesfile = ~/.gitattributes
+
+[alias]
+	change = codereview change
+	gofmt = codereview gofmt
+	mail = codereview mail
+	pending = codereview pending
+	submit = codereview submit
+	sync = codereview sync
+  current-branch = !git symbolic-ref -q HEAD | sed -e 's|^refs/heads/||'
+  pretty-log = !bash -c 'source ~/.githelpers && git-log-pretty --all'
+  pr = "!f() { git fetch origin refs/pull/$1/head:pr/$1; } ; f"
+  unstage = reset HEAD
+	appraise = !~/go/bin/git-appraise
+
+[color]
+  ui = auto
+[color "branch"]
+  current = yellow reverse
+  local = yellow
+  remote = green
+[color "diff"]
+  meta = yellow bold
+  frag = magenta bold
+  old = red bold
+  new = green bold
+[color "status"]
+  added = yellow
+  changed = green
+  untracked = cyan
+
+[credential]
+	helper = osxkeychain
+
+[push]
+  default = current
+[branch]
+	autosetuprebase = always
+[pull]
+	rebase = true 
+[http]
+  postBuffer = 524288000
+	cookiefile = ~/.gitcookies
+[merge]
+  log = false
+[fetch]
+  prune = true
+[mergetool]
+	keepBackup = true
+
+[filter "media"]
+	clean = git-media-clean %f
+	smudge = git-media-smudge %f
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	required = true
+	process = git-lfs filter-process
+
+[include]
+  path = ~/.gitconfig_local
+
+
+[init]
+	defaultBranch = main
+[user]
+	signingkey = AD22C42A62E0F092
+	name = Christian Sullivan
+	email = cs@bleve.io
+[commit]
+	gpgsign = true

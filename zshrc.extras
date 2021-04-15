@@ -1,0 +1,107 @@
+# System
+
+alias python=/usr/local/bin/python3
+
+if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then . $HOME/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+
+[[ -s "$HOME/google-cloud-sdk" ]] && source "$HOME/google-cloud-sdk/path.zsh.inc" && source "$HOME/google-cloud-sdk/completion.zsh.inc"
+
+export EDITOR="/usr/local/share/nvim"
+
+#BASE16_SHELL=true
+
+alias rsrc="source $HOME/.zshrc"
+
+# golang debugger
+alias qq=". $GOPATH/src/github.com/y0ssar1an/q/q.sh"
+alias rmqq="rm $TMPDIR/q"
+
+# vim
+alias vimog="/usr/local/bin/vim"
+alias vi="nvim"
+alias vim="nvim"
+
+## docker-machine
+alias dm="docker-machine"
+
+## osx
+alias hidden!="defaults write com.apple.finder AppleShowAllFiles TRUE && killall Finder"
+alias hidden="defaults write com.apple.finder AppleShowAllFiles FALSE && killall Finder"
+
+# helper aliases
+alias zshconfig="vim ~/.zshrc.local"
+alias ohmyzsh="vim ~/.oh-my-zsh"
+alias dotfiles="cd ~/.dotfiles"
+
+## Browsers
+alias chrome="$HOME/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
+alias safari="open -a Safari"
+alias ff="open -a Firefox"
+
+# Remove the hosts that I don't want to keep around- in this case, only
+# keep the first host.
+alias hosts="head -2 ~/.ssh/known_hosts | tail -1 > ~/.ssh/known_hosts"
+
+# Pipe my public key to my clipboard.
+alias pubkey="more ~/.ssh/id_rsa.pub | pbcopy | echo '=> Public key copied to pasteboard.'"
+
+# Exports
+export NVIM_TUI_ENABLE_TRUE_COLOR=1
+#export TERM="xterm-256color"
+export HOMEBREW_CELLAR="/usr/local/Cellar"
+export GOPATH=$HOME/go
+export GOCODE=$GOPATH/src
+export GOBINS=$GOPATH/bin
+export NODE_ENV=development
+export MANPATH="/usr/local/man:/usr/local/git/man:$MANPATH"
+
+#cocoapods
+export POD_PATH=`which pod`
+
+# PATH
+export PATH="$(yarn global bin | grep -o '/.*'):$PATH"
+export PATH=$GOBINS:./bin:./.bin:$HOME/.bin:$HOME/bin:$PATH
+export PATH=$PATH:$HOME/.cargo/bin
+export PATH=$PATH:$HOME/.deno/bin
+
+#export DOCKER_TLS_VERIFY="1"
+#export DOCKER_HOST="tcp://192.168.64.2:2376"
+#export DOCKER_CERT_PATH="$HOME/.docker/machine/machines/default"
+#export DOCKER_MACHINE_NAME="default"
+
+## Quick open dirs
+p (){ cd ~/projects/$1; }
+compctl -W $HOME/projects/ -/ p
+
+mygo (){ cd $GOCODE/$1; }
+compctl -W $GOCODE/ -/ mygo
+
+tcase (){ cd ~/test_cases/$1; }
+compctl -W $HOME/test_cases/ -/ tcase
+
+code (){ cd ~/code/$1; }
+compctl -W $HOME/code/ -/ code
+
+dotfiles_update () {
+  $HOME/.dotfiles/scripts/install.sh
+  brew upgrade
+}
+
+exip () {
+  # gather external ip address
+  echo -n "Current External IP: "
+  curl -s -m 5 http://myip.dk | grep "ha4" | sed -e 's/.*ha4">//g' -e 's/<\/span>.*//g'
+}
+
+ips () {
+  # determine local IP address
+  ifconfig | grep "inet " | awk '{ print $2 }'
+}
+
+killport () {
+  # portslay:  kill the task active on the specified TCP port
+  kill -9 `lsof -i tcp:$1 | tail -1 | awk '{ print $2;}'`
+}
+
+[[ -s "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
+export PATH="/usr/local/sbin:$PATH"
