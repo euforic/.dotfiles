@@ -28,24 +28,23 @@ Plug 'Shougo/neoinclude.vim', { 'for': ['c', 'cpp', 'objc', 'objcpp'] }
 Plug 'deoplete-plugins/deoplete-clang', { 'for': ['c', 'cpp', 'objc', 'objcpp'] }
 Plug 'rhysd/vim-clang-format', { 'for': ['c', 'cpp', 'objc', 'objcpp'] }
 
-Plug 'HerringtonDarkholme/yats.vim', { 'for': ['typescript', 'typescript.tsx'] }
-Plug 'mhartington/nvim-typescript' , { 'do': './install.sh', 'for': ['typescript', 'typescript.tsx'] }
 
 Plug 'prettier/vim-prettier', {
   \ 'do': 'yarn install',
-  \ 'for': ['javascript', 'javascript.jsx', 'typescript', 'typescript.tsx', 'css', 'less', 'scss', 'json', 'graphql','rust', 'yaml', 'markdown', 'vue', 'html'] }
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
 Plug 'mxw/vim-jsx', { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
 
 
 Plug 'fatih/vim-go', {'do': ':GoUpdateBinaries', 'for': ['go']}
-Plug 'zchee/deoplete-go', { 'do': 'make', 'for': ['go'] }
 Plug 'jodosha/vim-godebug', { 'for': ['go'] }
 Plug 'buoto/gotests-vim', { 'do': 'go get -u github.com/cweill/gotests', 'for': ['go']}
 
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 Plug 'racer-rust/vim-racer', { 'for': 'rust' }
 
+Plug 'HerringtonDarkholme/yats.vim'
+Plug 'mhartington/nvim-typescript', {'for': ['typescript', 'tsx'], 'do': './install.sh' }
 
 
 if filereadable(expand("~/.nvimrc.bundles.local"))
@@ -129,9 +128,8 @@ let g:prettier#config#single_quote = 'true'
 let g:prettier#config#bracket_spacing = 'false'
 " none|es5|all
 let g:prettier#config#trailing_comma = 'all'
-autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.yml,*.html,*.rs Prettier
-au BufNewFile,BufRead *.ts setlocal filetype=typescript
-au BufNewFile,BufRead *.tsx setlocal filetype=typescript.tsx
+"au BufNewFile,BufRead *.ts setlocal filetype=typescript
+"au BufNewFile,BufRead *.tsx setlocal filetype=typescript.tsx
 " ==================== VimAirline ====================
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
@@ -168,7 +166,12 @@ augroup PrevimSettings
 augroup END
 
 " ==================== Vim Golang =====================
+call deoplete#custom#option('omni_patterns', {
+\ 'go': '[^. *\t]\.\w*',
+\})
+
 let g:go_fmt_fail_silently = 1
+let g:go_imports_autosave = 1
 let g:go_fmt_options = {
 \ 'goimports': '-local do/',
 \}
@@ -179,10 +182,7 @@ let g:go_debug_windows = {
 \ }
 
 
-let g:go_fmt_command = "goimports"
-let g:go_info_mode='guru'
 let g:go_autodetect_gopath = 1
-let g:go_gocode_autobuild = 1
 let g:go_list_type = "quickfix"
 let g:go_test_prepend_name = 1
 
@@ -213,17 +213,13 @@ augroup go
 
   autocmd FileType go nmap <silent> <Leader>v <Plug>(go-def-vertical)
   autocmd FileType go nmap <silent> <Leader>s <Plug>(go-def-split)
-
   autocmd FileType go nmap <silent> <Leader>x <Plug>(go-doc-vertical)
-
   autocmd FileType go nmap <silent> <Leader>i <Plug>(go-info)
   autocmd FileType go nmap <silent> <Leader>l <Plug>(go-metalinter)
-
   autocmd FileType go nmap <silent> <leader>b :<C-u>call <SID>build_go_files()<CR>
   autocmd FileType go nmap <silent> <leader>t  <Plug>(go-test)
   autocmd FileType go nmap <silent> <leader>r  <Plug>(go-run)
   autocmd FileType go nmap <silent> <leader>e  <Plug>(go-install)
-
   autocmd FileType go nmap <silent> <Leader>c <Plug>(go-coverage-toggle)
 
   " I like these more!

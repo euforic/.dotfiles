@@ -66,3 +66,11 @@
   path = ~/.gitconfig_local
 
 
+[init]
+	defaultBranch = main
+[user]
+	signingkey = AD22C42A62E0F092
+	name = Christian Sullivan
+	email = cs@bleve.io
+[commit]
+	gpgsign = true
